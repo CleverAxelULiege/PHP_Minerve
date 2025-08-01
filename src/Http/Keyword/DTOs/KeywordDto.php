@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Intervention\DTOs;
+namespace App\Http\Keyword\DTOs;
 
 class KeywordDto
 {

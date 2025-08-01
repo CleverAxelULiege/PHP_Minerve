@@ -1,8 +1,8 @@
 <?php
 
-namespace App\User;
+namespace App\Http\User;
 
-use App\User\DTOs\UserStaffDto;
+use App\Http\User\DTOs\UserStaffDto;
 
 class UserMapper
 {

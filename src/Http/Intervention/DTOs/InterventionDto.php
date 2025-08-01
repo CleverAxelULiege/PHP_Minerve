@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Intervention\DTOs;
+namespace App\Http\Intervention\DTOs;
 
-use App\Intervention\DTOs\HelperDto;
-use App\Intervention\DTOs\KeywordDto;
-use App\Intervention\DTOs\ServiceDto;
+use App\Http\Intervention\DTOs\HelperDto;
+use App\Http\Intervention\DTOs\KeywordDto;
+use App\Http\Intervention\DTOs\ServiceDto;
 
 class InterventionDto
 {

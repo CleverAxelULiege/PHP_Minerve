@@ -1,9 +1,11 @@
 <?php
 
-/** @var \App\Support\PaginatedResult<\App\Intervention\DTOs\InterventionDto> $paginatedResults */
-/** @var \App\User\DTOs\UserStaffDto[] $udiStaff */
+/** @var \App\Support\PaginatedResult<\App\Http\Intervention\DTOs\InterventionDto> $paginatedResults */
+/** @var \App\Http\User\DTOs\UserStaffDto[] $udiStaff */
+/** @var \App\Http\Keyword\DTOs\KeywordDto[] $keywords */
+/** @var \App\Http\Intervention\DTOs\InterventionTypeDto[] $interventionTypes */
 
-use App\Intervention\InterventionState;
+use App\Http\Intervention\InterventionState;
 ?>
 
 <?php $this->extend('layout') ?>
@@ -102,11 +104,11 @@ use App\Intervention\InterventionState;
             <div class="form-row">
                <div class="form-group">
                   <label for="datedemande">Date de la demande</label>
-                  <input type="text" id="datedemande" name="datedemande">
+                  <div class="fixed-element" id="created_at"></div>
                </div>
                <div class="form-group">
                   <label for="datemaj">Date de la dernière mise à jour</label>
-                  <input type="text" id="datemaj" name="datemaj">
+                  <div class="fixed-element" id="updated_at"></div>
                </div>
             </div>
 
@@ -152,40 +154,38 @@ use App\Intervention\InterventionState;
 
             <div class="form-row">
                <div class="form-group">
-                  <label for="categorie">Catégorie</label>
-                  <select id="categorie" name="categorie">
+                  <label for="intervention_type">Catégorie</label>
+                  <select id="intervention_type" name="intervention_type">
                      <option value="">Sélectionner une catégorie</option>
-                     <option value="materiel">Matériel</option>
-                     <option value="logiciel">Logiciel</option>
-                     <option value="reseau">Réseau</option>
-                     <option value="securite">Sécurité</option>
+                     <?php foreach ($interventionTypes as $type): ?>
+                        <option value="<?= $type->id ?>"><?= $type->name ?></option>
+                     <?php endforeach; ?>
                   </select>
                </div>
                <div class="form-group">
-                  <label for="souscategorie">Sous-catégorie</label>
-                  <select id="souscategorie" name="souscategorie">
+                  <label for="intervention_subtype">Sous-catégorie</label>
+                  <select id="intervention_subtype" name="intervention_subtype">
                      <option value="">Sélectionner une sous-catégorie</option>
-                     <option value="panne">Panne</option>
-                     <option value="installation">Installation</option>
-                     <option value="configuration">Configuration</option>
-                     <option value="mise-a-jour">Mise à jour</option>
+                     <?php foreach ($interventionTypes as $type): ?>
+                        <?php foreach ($type->subTypes as $subtype): ?>
+                           <option data-intervention-type-id="<?=$type->id?>" value="<?= $subtype->id ?>"><?= $subtype->name ?></option>
+                        <?php endforeach; ?>
+                     <?php endforeach; ?>
                   </select>
                </div>
             </div>
-
+            
             <div class="form-group">
-               <label for="motscles">Mots clés</label>
-               <div class="breadcrumb-container">
-                  <select id="motscles" name="motscles">
-                     <option value="">Ajouter un mot clé</option>
-                     <option value="urgent">Urgent</option>
-                     <option value="critique">Critique</option>
-                     <option value="maintenance">Maintenance</option>
-                     <option value="bug">Bug</option>
-                     <option value="performance">Performance</option>
-                     <option value="securite">Sécurité</option>
+               <label for="keywords">Mots clés</label>
+               <div class="breadcrumb_container">
+                  <select id="keywords" name="keywords">
+                     <option value="">Sélectionner un mot clé</option>
+                     <?php foreach ($keywords as $keyword): ?>
+                        <option value="<?= $keyword->id ?>"><?= $keyword->name ?></option>
+                     <?php endforeach; ?>
                   </select>
-                  <div class="breadcrumb" id="motscles-breadcrumb"></div>
+                  <div class="breadcrumb" id="breadcrumb_keywords">
+                  </div>
                </div>
             </div>
 
@@ -206,15 +206,16 @@ use App\Intervention\InterventionState;
             </div>
 
             <div class="form-group">
-               <label for="intervenants">Intervenants</label>
-               <div class="breadcrumb-container">
-                  <select id="intervenants" name="intervenants">
-                     <option value="" selected>-</option>
+               <label for="helpers">Intervenants</label>
+               <div class="breadcrumb_container">
+                  <select id="helpers" name="helpers">
+                     <option value="" selected>Sélectionner un intervenant</option>
+                     <option value="all">Tous</option>
                      <?php foreach ($udiStaff as $staff): ?>
                         <option value="<?= $staff->id ?>"><?= $staff->name ?></option>
                      <?php endforeach; ?>
                   </select>
-                  <div class="breadcrumb" id="intervenants-breadcrumb"></div>
+                  <div class="breadcrumb" id="breadcrumb_helpers"></div>
                </div>
             </div>
 

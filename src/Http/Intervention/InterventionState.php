@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Intervention;
+namespace App\Http\Intervention;
 
 class InterventionState
 {

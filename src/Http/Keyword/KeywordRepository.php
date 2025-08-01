@@ -1,0 +1,18 @@
+<?php 
+
+namespace App\Http\Keyword;
+
+use App\Database\Database;
+
+class KeywordRepository {
+    public function __construct(private Database $database)
+    {
+        
+    }
+
+    public function getAll(){
+        return $this->database->run("SELECT id, name FROM keywords ORDER BY id")->fetchAll();
+    }
+}
+
+?>

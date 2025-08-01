@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Intervention;
+namespace App\Http\Intervention;
 
 use App\Database\Database;
 
@@ -267,5 +267,26 @@ class InterventionRepository
         }
 
         return $grouped;
+    }
+
+    public function getInterventionTypes()
+    {
+        return $this->db->run("
+        SELECT 
+        it.id AS intervention_id,
+        it.name AS intervention_name,
+        JSON_AGG(
+            JSON_BUILD_OBJECT(
+                'id', ist.id,
+                'name', ist.name,
+                'generic_solution', ist.generic_solution
+            )
+        ) AS intervention_subtypes
+        FROM intervention_types AS it
+        INNER JOIN intervention_subtypes AS ist ON ist.intervention_type_id = it.id
+        WHERE ist.visible = true
+        GROUP BY it.id
+        ORDER BY it.id")
+            ->fetchAll();
     }
 }

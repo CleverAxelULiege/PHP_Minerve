@@ -1,11 +1,13 @@
 <?php
 
-namespace App\Intervention  ;
+namespace App\Http\Intervention;
 
-use App\Intervention\DTOs\InterventionDto;
-use App\Intervention\DTOs\HelperDto;
-use App\Intervention\DTOs\ServiceDto;
-use App\Intervention\DTOs\KeywordDto;
+use App\Http\Intervention\DTOs\HelperDto;
+use App\Http\Intervention\DTOs\KeywordDto;
+use App\Http\Intervention\DTOs\ServiceDto;
+use App\Http\Intervention\DTOs\InterventionDto;
+use App\Http\Intervention\DTOs\InterventionTypeDto;
+use App\Http\Intervention\DTOs\InterventionSubtypeDto;
 
 class InterventionMapper
 {
@@ -41,7 +43,7 @@ class InterventionMapper
         ];
 
         foreach ($map as $source => $target) {
-            if($data->$source === null){
+            if ($data->$source === null) {
                 $dto->$target = null;
             } else {
                 $dto->$target = $data->$source;
@@ -68,6 +70,27 @@ class InterventionMapper
             $keyword->name = $k->name;
             return $keyword;
         }, $data->keywords ?? []);
+
+        return $dto;
+    }
+
+    public static function fromRawToType(object $rawData): InterventionTypeDto
+    {
+        $dto = new InterventionTypeDto();
+        $dto->id = $rawData->intervention_id;
+        $dto->name = $rawData->intervention_name;
+
+        $subtypes = json_decode($rawData->intervention_subtypes) ?? [];
+
+        usort($subtypes, fn($a, $b) => $a->id <=> $b->id);
+
+        $dto->subTypes = array_map(function ($subtype) {
+            $subDto = new InterventionSubtypeDto();
+            $subDto->id = $subtype->id;
+            $subDto->name = $subtype->name;
+            $subDto->genericSolution = $subtype->generic_solution;
+            return $subDto;
+        }, $subtypes);
 
         return $dto;
     }

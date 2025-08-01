@@ -1,6 +1,6 @@
 <?php
 
-namespace App\User\DTOs;
+namespace App\Http\User\DTOs;
 
 class UserStaffDto
 {
