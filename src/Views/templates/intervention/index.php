@@ -19,7 +19,7 @@ use App\Http\Intervention\InterventionState;
 <?php $this->endSection() ?>
 
 <?php $this->section('script') ?>
-<script src="./scripts/intervention/index.js"></script>
+<script src="./scripts/intervention/index.js" type="module"></script>
 <?php $this->endSection() ?>
 
 
@@ -98,36 +98,36 @@ use App\Http\Intervention\InterventionState;
          </table>
       </div>
    </div>
-   <div class="intervention_details_container ">
-      <div class="content ">
+   <div class="intervention_details_container hidden">
+      <div class="content hidden">
 
          <h2>Intervention #1230</h2>
          <form id="interventionForm">
             <div class="form-row">
                <div class="form-group">
-                  <label for="datedemande">Date de la demande</label>
+                  <label for="created_at">Date de la demande</label>
                   <div class="fixed-element" id="created_at"></div>
                </div>
                <div class="form-group">
-                  <label for="datemaj">Date de la dernière mise à jour</label>
+                  <label for="updated_at">Date de la dernière mise à jour</label>
                   <div class="fixed-element" id="updated_at"></div>
                </div>
             </div>
 
             <div class="form-row">
                <div class="form-group">
-                  <label for="demandeur">Demandeur</label>
-                  <input type="text" id="demandeur" name="demandeur" list="demandeur-list">
-                  <datalist id="demandeur-list">
+                  <label for="requester_user">Demandeur </label>
+                  <input type="text" id="requester_user" name="requester_user" list="requester_user_list">
+                  <datalist id="requester_user_list">
                      <?php foreach ($users as $user): ?>
                         <option data-value-id="<?= $user->id ?>" value="<?= $user->firstname . " " . $user->lastname ?>"><?= $user->firstname . " " . $user->lastname ?></option>
                      <?php endforeach; ?>
                   </datalist>
                </div>
                <div class="form-group">
-                  <label for="intervention">Intervention pour</label>
-                  <input type="text" id="intervention" name="intervention" list="intervention-list">
-                  <datalist id="intervention-list">
+                  <label for="intervention_target_user">Intervention pour</label>
+                  <input type="text" id="intervention_target_user" name="intervention_target_user" list="intervention_target_user_list">
+                  <datalist id="intervention_target_user_list">
                      <?php foreach ($users as $user): ?>
                         <option data-value-id="<?= $user->id ?>" value="<?= $user->firstname . " " . $user->lastname ?>"><?= $user->firstname . " " . $user->lastname ?></option>
                      <?php endforeach; ?>
@@ -137,8 +137,8 @@ use App\Http\Intervention\InterventionState;
 
             <div class="form-group">
                <label for="material">Intervention pour le matériel</label>
-               <input type="text" id="material" name="material" list="material-list">
-               <datalist id="material-list">
+               <input type="text" id="material" name="material" list="material_list">
+               <datalist id="material_list">
                   <?php foreach ($materials as $material): ?>
                      <option data-value-id="<?=$material->id?>" value="<?= $material->identificationNumber . " " . $material->identificationCode ?>"><?= $material->identificationNumber . " " . $material->identificationCode ?></option>
                   <?php endforeach; ?>
@@ -147,7 +147,7 @@ use App\Http\Intervention\InterventionState;
 
             <div class="form-group">
                <label>IP de la demande</label>
-               <div class="fixed-element" id="ipdemande">192.168.1.100</div>
+               <div class="fixed-element" id="request_ip">192.168.1.100</div>
             </div>
 
             <div class="form-row">
@@ -189,18 +189,18 @@ use App\Http\Intervention\InterventionState;
 
             <div class="form-row">
                <div class="form-group">
-                  <label for="interventionprevue">Intervention prévue le</label>
-                  <input type="text" id="interventionprevue" name="interventionprevue">
+                  <label for="intervention_date">Intervention prévue le</label>
+                  <input type="text" id="intervention_date" name="intervention_date">
                </div>
                <div class="form-group">
-                  <label for="agenda">Agenda</label>
-                  <input type="text" id="agenda" name="agenda">
+                  <label for="agenda_date">Agenda</label>
+                  <input type="text" id="agenda_date" name="agenda_date">
                </div>
             </div>
 
             <div class="form-group">
-               <label for="commentaire">Commentaire pour l'agenda</label>
-               <textarea id="commentaire" name="commentaire" rows="4"></textarea>
+               <label for="agenda_comments">Commentaire pour l'agenda</label>
+               <textarea id="agenda_comments" name="agenda_comments" rows="4"></textarea>
             </div>
 
             <div class="form-group">
@@ -232,17 +232,17 @@ use App\Http\Intervention\InterventionState;
 
             <div class="form-group">
                <label>Problème</label>
-               <div class="fixed-element" id="probleme">Description automatique du problème détecté</div>
+               <div class="fixed-element" id="problem">Description automatique du problème détecté</div>
             </div>
 
             <div class="form-group">
                <label for="titre">Titre</label>
-               <input type="text" id="titre" name="titre">
+               <input type="text" id="title" name="title">
             </div>
 
             <div class="form-group">
-               <label for="commentaires">Commentaires</label>
-               <textarea id="commentaires" name="commentaires" rows="4"></textarea>
+               <label for="comments">Commentaires</label>
+               <textarea id="comments" name="comments" rows="4"></textarea>
             </div>
 
             <div class="form-group">

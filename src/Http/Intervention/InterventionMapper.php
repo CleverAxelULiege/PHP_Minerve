@@ -103,8 +103,8 @@ class InterventionMapper
             id: (int) $row->message_id,
             message: $row->message ?? null,
             isPublic: (bool) $row->message_public,
-            createdAt: (string) $row->message_created_at,
-            updatedAt: (string) $row->message_updated_at,
+            createdAt: $row->message_created_at,
+            updatedAt: $row->message_updated_at,
             author: new AuthorMessageDto(
                 id: $row->user_id,
                 firstName: $row->user_firstname ?? null,
