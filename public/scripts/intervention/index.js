@@ -55,6 +55,7 @@ function onClickInterventionRow(row) {
 INTERVENTION_TYPE_SELECT.addEventListener("change", () => {
     onChangeInterventionType();
 });
+onChangeInterventionType();
 
 KEYWORD_SELECT.addEventListener("change", () => { onChangeKeywordSelect() });
 HELPERS_SELECT.addEventListener("change", () => onChangeHelperSelect());

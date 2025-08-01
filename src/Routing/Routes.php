@@ -8,6 +8,8 @@ use App\Http\Intervention\InterventionRepository;
 use App\Http\Intervention\InterventionService;
 use App\Http\Keyword\KeywordRepository;
 use App\Http\Keyword\KeywordService;
+use App\Http\Material\MaterialRepository;
+use App\Http\Material\MaterialService;
 use App\Routing\Router;
 use App\Http\User\UserController;
 use App\Http\User\UserRepository;
@@ -26,9 +28,12 @@ class Routes
             $keywordRepository = new KeywordRepository($database);
             $keywordService = new KeywordService($keywordRepository);
 
+            $materialRepository = new MaterialRepository($database);
+            $materialService = new MaterialService($materialRepository);
+
             $interventionRepository = new InterventionRepository($database);
             $interventionService = new InterventionService($interventionRepository);
-            $controller = new InterventionController($interventionService, $userService, $keywordService);
+            $controller = new InterventionController($interventionService, $userService, $keywordService, $materialService);
             return $controller->index();
         });
 
@@ -43,9 +48,12 @@ class Routes
             $keywordRepository = new KeywordRepository($database);
             $keywordService = new KeywordService($keywordRepository);
 
+            $materialRepository = new MaterialRepository($database);
+            $materialService = new MaterialService($materialRepository);
+
             $interventionRepository = new InterventionRepository($database);
             $interventionService = new InterventionService($interventionRepository);
-            $controller = new InterventionController($interventionService, $userService, $keywordService);
+            $controller = new InterventionController($interventionService, $userService, $keywordService, $materialService);
             return $controller->apiShow($id);
         });
 

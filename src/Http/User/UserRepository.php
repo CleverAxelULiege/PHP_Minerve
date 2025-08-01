@@ -17,4 +17,8 @@ class UserRepository
             WHERE utd.department_id = 2 AND u.visible = true;"
         )->fetchAll();
     }
+
+    public function getAll() {
+        return $this->database->run("SELECT * FROM fapse_users WHERE visible = true;")->fetchAll();
+    }
 }

@@ -43,4 +43,7 @@ class InterventionDto
 
     /** @var KeywordDto[] */
     public array $keywords = [];
+
+    /** @var InterventionMessageDto[] */
+    public array $messages = [];
 }

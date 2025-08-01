@@ -11,7 +11,7 @@ class KeywordRepository {
     }
 
     public function getAll(){
-        return $this->database->run("SELECT id, name FROM keywords ORDER BY id")->fetchAll();
+        return $this->database->run("SELECT id, name FROM keywords ORDER BY name")->fetchAll();
     }
 }
 

@@ -24,7 +24,7 @@ class InterventionService
         }
 
         /** @var InterventionDto[] */
-        $mappedInterventions = array_map(fn($i) => InterventionMapper::mapToDto($i), $this->interventionRepository->getPaginatedInterventions($page, $resultsPerPage));
+        $mappedInterventions = array_map(fn($i) => InterventionMapper::mapToInterventionDto($i), $this->interventionRepository->getPaginatedInterventions($page, $resultsPerPage));
 
         $paginatedResult = new PaginatedResult($mappedInterventions, $page, $resultsPerPage, $totalInterventions);
         return $paginatedResult;
@@ -43,6 +43,15 @@ class InterventionService
             return null;
         }
 
-        return InterventionMapper::mapToDto($intervention);
+        $interventionMapped =  InterventionMapper::mapToInterventionDto($intervention);
+        $interventionMapped->messages =  array_map(fn($m) => InterventionMapper::mapToMessageDto($m), $this->interventionRepository->getInterventionMessages($interventionId));
+
+        return $interventionMapped;
+    }
+
+    public function getInterventionMessages($interventionId)
+    {
+        $interventionMessages = $this->interventionRepository->getInterventionMessages($interventionId);
+        return array_map(fn($m) => InterventionMapper::mapToMessageDto($m), $interventionMessages);
     }
 }

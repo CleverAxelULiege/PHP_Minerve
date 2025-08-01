@@ -273,7 +273,24 @@ class InterventionRepository
         INNER JOIN intervention_subtypes AS ist ON ist.intervention_type_id = it.id
         WHERE ist.visible = true
         GROUP BY it.id
-        ORDER BY it.id")
+        ORDER BY it.name")
             ->fetchAll();
+    }
+
+    public function getInterventionMessages($interventionId)
+    {
+        return $this->db->run("
+        SELECT 
+        im.id as message_id,
+        im.message as message,
+        im.is_public as message_public,
+        im.created_at as message_created_at,
+        im.updated_at as message_updated_at,
+        u.id AS user_id,
+        u.firstname as user_firstname,
+        u.ulg_id as user_ulg_id,
+        u.lastname as user_lastname
+        FROM intervention_messages AS im
+        LEFT JOIN fapse_users AS u ON im.author_user_id = u.id WHERE im.intervention_id = ?", [$interventionId])->fetchAll();
     }
 }

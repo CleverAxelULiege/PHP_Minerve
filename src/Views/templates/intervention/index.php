@@ -2,8 +2,10 @@
 
 /** @var \App\Support\PaginatedResult<\App\Http\Intervention\DTOs\InterventionDto> $paginatedResults */
 /** @var \App\Http\User\DTOs\UserStaffDto[] $udiStaff */
+/** @var \App\Http\User\DTOs\UserDto[] $users */
 /** @var \App\Http\Keyword\DTOs\KeywordDto[] $keywords */
 /** @var \App\Http\Intervention\DTOs\InterventionTypeDto[] $interventionTypes */
+/** @var \App\Http\Material\DTOs\MaterialDto[] $materials */
 
 use App\Http\Intervention\InterventionState;
 ?>
@@ -68,7 +70,7 @@ use App\Http\Intervention\InterventionState;
                         <?php endforeach ?>
                      </td>
                      <td><?= $this->escape($intervention->subtypeName ?? "-") ?></td>
-                     <td><?= $this->escape($intervention->title ?? "-") ?></td>
+                     <td><?= $this->escape($this->truncate($intervention->title ?? "-", 30)) ?></td>
                      <td>
 
                         <?php if ($intervention->status == InterventionState::RECEIVED): ?>
@@ -117,20 +119,18 @@ use App\Http\Intervention\InterventionState;
                   <label for="demandeur">Demandeur</label>
                   <input type="text" id="demandeur" name="demandeur" list="demandeur-list">
                   <datalist id="demandeur-list">
-                     <option value="Jean Dupont">
-                     <option value="Marie Martin">
-                     <option value="Pierre Bernard">
-                     <option value="Sophie Dubois">
+                     <?php foreach ($users as $user): ?>
+                        <option data-value-id="<?= $user->id ?>" value="<?= $user->firstname . " " . $user->lastname ?>"><?= $user->firstname . " " . $user->lastname ?></option>
+                     <?php endforeach; ?>
                   </datalist>
                </div>
                <div class="form-group">
                   <label for="intervention">Intervention pour</label>
                   <input type="text" id="intervention" name="intervention" list="intervention-list">
                   <datalist id="intervention-list">
-                     <option value="Maintenance préventive">
-                     <option value="Réparation urgente">
-                     <option value="Installation">
-                     <option value="Configuration">
+                     <?php foreach ($users as $user): ?>
+                        <option data-value-id="<?= $user->id ?>" value="<?= $user->firstname . " " . $user->lastname ?>"><?= $user->firstname . " " . $user->lastname ?></option>
+                     <?php endforeach; ?>
                   </datalist>
                </div>
             </div>
@@ -139,11 +139,9 @@ use App\Http\Intervention\InterventionState;
                <label for="material">Intervention pour le matériel</label>
                <input type="text" id="material" name="material" list="material-list">
                <datalist id="material-list">
-                  <option value="Ordinateur portable">
-                  <option value="Serveur">
-                  <option value="Imprimante">
-                  <option value="Réseau">
-                  <option value="Téléphone">
+                  <?php foreach ($materials as $material): ?>
+                     <option data-value-id="<?=$material->id?>" value="<?= $material->identificationNumber . " " . $material->identificationCode ?>"><?= $material->identificationNumber . " " . $material->identificationCode ?></option>
+                  <?php endforeach; ?>
                </datalist>
             </div>
 
@@ -168,13 +166,13 @@ use App\Http\Intervention\InterventionState;
                      <option value="">Sélectionner une sous-catégorie</option>
                      <?php foreach ($interventionTypes as $type): ?>
                         <?php foreach ($type->subTypes as $subtype): ?>
-                           <option data-intervention-type-id="<?=$type->id?>" value="<?= $subtype->id ?>"><?= $subtype->name ?></option>
+                           <option data-intervention-type-id="<?= $type->id ?>" value="<?= $subtype->id ?>"><?= $subtype->name ?></option>
                         <?php endforeach; ?>
                      <?php endforeach; ?>
                   </select>
                </div>
             </div>
-            
+
             <div class="form-group">
                <label for="keywords">Mots clés</label>
                <div class="breadcrumb_container">

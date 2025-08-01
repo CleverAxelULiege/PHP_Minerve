@@ -2,16 +2,18 @@
 
 namespace App\Http\Intervention;
 
+use App\Http\Intervention\DTOs\AuthorMessageDto;
 use App\Http\Intervention\DTOs\HelperDto;
 use App\Http\Intervention\DTOs\KeywordDto;
 use App\Http\Intervention\DTOs\ServiceDto;
 use App\Http\Intervention\DTOs\InterventionDto;
+use App\Http\Intervention\DTOs\InterventionMessageDto;
 use App\Http\Intervention\DTOs\InterventionTypeDto;
 use App\Http\Intervention\DTOs\InterventionSubtypeDto;
 
 class InterventionMapper
 {
-    public static function mapToDto(object $data): InterventionDto
+    public static function mapToInterventionDto(object $data): InterventionDto
     {
         $dto = new InterventionDto();
 
@@ -82,7 +84,7 @@ class InterventionMapper
 
         $subtypes = json_decode($rawData->intervention_subtypes) ?? [];
 
-        usort($subtypes, fn($a, $b) => $a->id <=> $b->id);
+        usort($subtypes, fn($a, $b) => $a->name <=> $b->name);
 
         $dto->subTypes = array_map(function ($subtype) {
             $subDto = new InterventionSubtypeDto();
@@ -93,5 +95,22 @@ class InterventionMapper
         }, $subtypes);
 
         return $dto;
+    }
+
+    public static function mapToMessageDto(object $row): InterventionMessageDto
+    {
+        return new InterventionMessageDto(
+            id: (int) $row->message_id,
+            message: $row->message ?? null,
+            isPublic: (bool) $row->message_public,
+            createdAt: (string) $row->message_created_at,
+            updatedAt: (string) $row->message_updated_at,
+            author: new AuthorMessageDto(
+                id: $row->user_id,
+                firstName: $row->user_firstname ?? null,
+                lastName: $row->user_lastname ?? null,
+                ulgId: $row->user_ulg_id ?? null
+            )
+        );
     }
 }
