@@ -1,0 +1,20 @@
+<?php
+
+namespace App\User;
+
+use App\Database\Database;
+
+class UserRepository
+{
+    public function __construct(private Database $database) {}
+
+
+    public function getUDIStaff(){
+        return $this->database->run("
+            SELECT u.id AS user_id, CONCAT(u.lastname, ' ', u.firstname) AS user_name, u.ulg_id as user_ulg_id
+            FROM fapse_users AS u
+            INNER JOIN users_to_departments AS utd ON utd.user_id = u.id
+            WHERE utd.department_id = 2 AND u.visible = true;"
+        )->fetchAll();
+    }
+}

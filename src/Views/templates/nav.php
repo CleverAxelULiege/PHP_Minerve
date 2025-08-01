@@ -1,0 +1,1 @@
+<nav>iam the nav <?=$this->escape($data)?></nav>
