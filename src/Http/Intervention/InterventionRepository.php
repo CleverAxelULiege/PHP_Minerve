@@ -22,45 +22,40 @@ class InterventionRepository
     public function getPaginatedInterventions(int $page, int $resultsPerPage)
     {
         $offset = ($page - 1) * $resultsPerPage;
-
         $sql = "
-        SELECT 
-            i.*,
-            m.id as material_id,
-            CONCAT(m.identification_number, '-', m.identification_code) AS material_name,
-            target_user.id AS target_user_id,
-            requester_user.id AS requester_user_id,
-            CONCAT(target_user.firstname, ' ', target_user.surname) AS target_user_name,
-            CONCAT(requester_user.firstname, ' ', requester_user.surname) AS requester_user_name,
-            ist.name AS subtype_name,
-            ist.id AS subtype_id,
-            it.name as type_name,
-            it.id as type_id
-        FROM interventions i
-        LEFT JOIN fapse_users target_user ON target_user.id = i.intervention_target_user_id
-        LEFT JOIN fapse_users requester_user ON requester_user.id = i.requester_user_id
-        LEFT JOIN intervention_subtypes ist ON ist.id = i.intervention_subtype_id
-        LEFT JOIN intervention_types it ON ist.id = i.intervention_type_id
-        LEFT JOIN materials m ON m.id = i.material_id
-        ORDER BY i.id DESC
-        LIMIT ? OFFSET ?
-    ";
-
+            SELECT
+                i.*,
+                m.id as material_id,
+                CONCAT(m.identification_number, '-', m.identification_code) AS material_name,
+                target_user.id AS target_user_id,
+                requester_user.id AS requester_user_id,
+                CONCAT(target_user.firstname, ' ', target_user.surname) AS target_user_name,
+                CONCAT(requester_user.firstname, ' ', requester_user.surname) AS requester_user_name,
+                ist.name AS subtype_name,
+                ist.id AS subtype_id,
+                COALESCE(it_via_subtype.name, it_direct.name) as type_name,
+                COALESCE(it_via_subtype.id, it_direct.id) as type_id
+            FROM interventions i
+            LEFT JOIN fapse_users target_user ON target_user.id = i.intervention_target_user_id
+            LEFT JOIN fapse_users requester_user ON requester_user.id = i.requester_user_id
+            LEFT JOIN intervention_subtypes ist ON ist.id = i.intervention_subtype_id
+            LEFT JOIN intervention_types it_via_subtype ON it_via_subtype.id = ist.intervention_type_id
+            LEFT JOIN intervention_types it_direct ON it_direct.id = i.intervention_type_id
+            LEFT JOIN materials m ON m.id = i.material_id
+            ORDER BY i.id DESC
+            LIMIT ? OFFSET ?
+            ";
         $interventions = $this->db->run($sql, [$resultsPerPage, $offset])->fetchAll();
-
         $interventionIds = array_column($interventions, 'id');
         $userIds = array_column($interventions, 'intervention_target_user_id');
-
         $allHelpers = $this->getBatchHelpers($interventionIds);
         $allServices = $this->getBatchServices($userIds);
         $allKeywords = $this->getBatchKeywords($interventionIds);
-
         foreach ($interventions as &$intervention) {
             $intervention->helpers = $allHelpers[$intervention->id] ?? [];
             $intervention->services = $allServices[$intervention->intervention_target_user_id] ?? [];
             $intervention->keywords = $allKeywords[$intervention->id] ?? [];
         }
-
         return $interventions;
     }
 
@@ -101,31 +96,27 @@ class InterventionRepository
     private function getBaseIntervention($interventionId)
     {
         $sql = "
-            SELECT 
-                i.*,
-                m.id as material_id,
-                CONCAT(m.identification_number, '-', m.identification_code) AS material_name,
-                target_user.id AS target_user_id,
-                requester_user.id AS requester_user_id,
-                CONCAT(target_user.firstname, ' ', target_user.surname) AS target_user_name,
-                CONCAT(requester_user.firstname, ' ', requester_user.surname) AS requester_user_name,
-                ist.name AS subtype_name,
-                ist.id AS subtype_id,
-                it.name as type_name,
-                it.id as type_id
-            FROM interventions i
-
-            LEFT JOIN fapse_users target_user ON target_user.id = i.intervention_target_user_id
-            LEFT JOIN fapse_users requester_user ON requester_user.id = i.requester_user_id
-
-            LEFT JOIN intervention_types it ON it.id = i.intervention_type_id
-            LEFT JOIN intervention_subtypes ist ON ist.id = i.intervention_subtype_id
-
-            LEFT JOIN materials m ON m.id = i.material_id
-
-            WHERE i.id = ?
-        ";
-
+        SELECT
+            i.*,
+            m.id as material_id,
+            CONCAT(m.identification_number, '-', m.identification_code) AS material_name,
+            target_user.id AS target_user_id,
+            requester_user.id AS requester_user_id,
+            CONCAT(target_user.firstname, ' ', target_user.surname) AS target_user_name,
+            CONCAT(requester_user.firstname, ' ', requester_user.surname) AS requester_user_name,
+            ist.name AS subtype_name,
+            ist.id AS subtype_id,
+            COALESCE(it_via_subtype.name, it_direct.name) as type_name,
+            COALESCE(it_via_subtype.id, it_direct.id) as type_id
+        FROM interventions i
+        LEFT JOIN fapse_users target_user ON target_user.id = i.intervention_target_user_id
+        LEFT JOIN fapse_users requester_user ON requester_user.id = i.requester_user_id
+        LEFT JOIN intervention_subtypes ist ON ist.id = i.intervention_subtype_id
+        LEFT JOIN intervention_types it_via_subtype ON it_via_subtype.id = ist.intervention_type_id
+        LEFT JOIN intervention_types it_direct ON it_direct.id = i.intervention_type_id
+        LEFT JOIN materials m ON m.id = i.material_id
+        WHERE i.id = ?
+    ";
         return $this->db->run($sql, [$interventionId])->fetchObject();
     }
 
@@ -159,32 +150,28 @@ class InterventionRepository
     {
         $placeholders = str_repeat('?,', count($interventionIds) - 1) . '?';
         $sql = "
-            SELECT 
-                i.*,
-                m.id as material_id,
-                CONCAT(m.identification_number, '-', m.identification_code) AS material_name,
-                target_user.id AS target_user_id,
-                requester_user.id AS requester_user_id,
-                CONCAT(target_user.firstname, ' ', target_user.surname) AS target_user_name,
-                CONCAT(requester_user.firstname, ' ', requester_user.surname) AS requester_user_name,
-                ist.name AS subtype_name,
-                ist.id AS subtype_id,
-                it.name as type_name,
-                it.id as type_id
-            FROM interventions i
-
-            LEFT JOIN fapse_users target_user ON target_user.id = i.intervention_target_user_id
-            LEFT JOIN fapse_users requester_user ON requester_user.id = i.requester_user_id
-
-            LEFT JOIN intervention_types it ON ist.id = i.intervention_type_id
-            LEFT JOIN intervention_subtypes ist ON ist.id = i.intervention_subtype_id
-
-            LEFT JOIN materials m ON m.id = i.material_id
-
-            WHERE i.id IN ($placeholders)
-            ORDER BY i.id
-        ";
-
+        SELECT
+            i.*,
+            m.id as material_id,
+            CONCAT(m.identification_number, '-', m.identification_code) AS material_name,
+            target_user.id AS target_user_id,
+            requester_user.id AS requester_user_id,
+            CONCAT(target_user.firstname, ' ', target_user.surname) AS target_user_name,
+            CONCAT(requester_user.firstname, ' ', requester_user.surname) AS requester_user_name,
+            ist.name AS subtype_name,
+            ist.id AS subtype_id,
+            COALESCE(it_via_subtype.name, it_direct.name) as type_name,
+            COALESCE(it_via_subtype.id, it_direct.id) as type_id
+        FROM interventions i
+        LEFT JOIN fapse_users target_user ON target_user.id = i.intervention_target_user_id
+        LEFT JOIN fapse_users requester_user ON requester_user.id = i.requester_user_id
+        LEFT JOIN intervention_subtypes ist ON ist.id = i.intervention_subtype_id
+        LEFT JOIN intervention_types it_via_subtype ON it_via_subtype.id = ist.intervention_type_id
+        LEFT JOIN intervention_types it_direct ON it_direct.id = i.intervention_type_id
+        LEFT JOIN materials m ON m.id = i.material_id
+        WHERE i.id IN ($placeholders)
+        ORDER BY i.id
+    ";
         return $this->db->run($sql, $interventionIds)->fetchAll();
     }
 
