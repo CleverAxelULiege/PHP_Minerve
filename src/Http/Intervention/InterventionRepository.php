@@ -124,7 +124,7 @@ class InterventionRepository
     {
         $sql = "
             SELECT DISTINCT h.id, h.surname
-            FROM intervention_to_helpers ith
+            FROM helpers_to_interventions ith
             JOIN fapse_users h ON h.id = ith.user_id
             WHERE ith.intervention_id = ?
         ";
@@ -136,7 +136,7 @@ class InterventionRepository
     {
         $sql = "
             SELECT DISTINCT s.id, s.name
-            FROM users_to_services uts
+            FROM services_to_users uts
             JOIN services s ON s.id = uts.service_id
             WHERE uts.user_id = ?
         ";
@@ -183,7 +183,7 @@ class InterventionRepository
                 ith.intervention_id,
                 h.id, 
                 h.surname
-            FROM intervention_to_helpers ith
+            FROM helpers_to_interventions ith
             JOIN fapse_users h ON h.id = ith.user_id
             WHERE ith.intervention_id IN ($placeholders)
         ";
@@ -206,7 +206,7 @@ class InterventionRepository
                 uts.user_id,
                 s.id, 
                 s.name
-            FROM users_to_services uts
+            FROM services_to_users uts
             JOIN services s ON s.id = uts.service_id
             WHERE uts.user_id IN ($placeholders)
         ";
@@ -225,7 +225,7 @@ class InterventionRepository
     {
         $sql = "
             SELECT DISTINCT k.id, k.name
-            FROM intervention_to_keywords itk
+            FROM interventions_to_keywords itk
             JOIN keywords k ON k.id = itk.keyword_id
             WHERE itk.intervention_id = ?
         ";
@@ -241,7 +241,7 @@ class InterventionRepository
                 itk.intervention_id,
                 k.id, 
                 k.name
-            FROM intervention_to_keywords itk
+            FROM interventions_to_keywords itk
             JOIN keywords k ON k.id = itk.keyword_id
             WHERE itk.intervention_id IN ($placeholders)
         ";
