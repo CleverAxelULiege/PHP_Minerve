@@ -10,6 +10,7 @@ use App\Routing\Routes;
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= $this->showSection('title') ?></title>
     <link rel="stylesheet" href="./styles/style.css">
+    <link rel="stylesheet" href="./styles/generals/datepicker.css">
     <?= $this->showSection("style") ?>
 </head>
 
@@ -35,5 +36,6 @@ use App\Routing\Routes;
         </section>
     </main>
 </body>
+<script src="./scripts/generals/datepicker.js"></script>
 <?= $this->showSection("script") ?>
 </html>

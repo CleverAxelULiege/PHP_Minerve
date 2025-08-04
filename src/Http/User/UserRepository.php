@@ -11,7 +11,7 @@ class UserRepository
 
     public function getUDIStaff(){
         return $this->database->run("
-            SELECT u.id AS user_id, CONCAT(u.lastname, ' ', u.firstname) AS user_name, u.ulg_id as user_ulg_id
+            SELECT u.id AS user_id, CONCAT(u.lastname, ' ', u.firstname) AS user_name, u.ulg_id as user_ulg_id, surname AS user_surname
             FROM fapse_users AS u
             INNER JOIN departments_to_users AS utd ON utd.user_id = u.id
             WHERE utd.department_id = 2 AND u.visible = true;"

@@ -9,7 +9,7 @@ class UserMapper
 {
     public static function mapToUserStaffDto(object $data): UserStaffDto
     {
-        $dto = new UserStaffDto($data->user_id, $data->user_ulg_id, $data->user_name);
+        $dto = new UserStaffDto($data->user_id, $data->user_ulg_id, $data->user_name, $data->user_surname);
         return $dto;
     }
     public static function mapToUserDto(object $data): UserDto
