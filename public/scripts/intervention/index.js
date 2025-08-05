@@ -14,6 +14,7 @@
 import { formatDate } from "../helpers/date.js";
 import { convertToAscii } from "../helpers/string.js";
 import { InterventionApiCall } from "./api/InterventionApiCall.js";
+import { InterventionFormManager } from "./InterventionFormManager.js";
 
 
 
@@ -30,7 +31,7 @@ const DOM = {
     requesterUserInput: document.getElementById("requester_user"),
     requesterUserLink: document.querySelector(`[for="requester_user"] a`),
     requesterUserIdInput: document.getElementById("requester_user_id"),
-    
+
     interventionTargetUserInput: document.getElementById("intervention_target_user"),
     interventionTargetUserIdInput: document.getElementById("intervention_target_user_id"),
     interventionTargetUserList: document.getElementById("intervention_target_user_list"),
@@ -85,7 +86,7 @@ optionsRequesterUserList.forEach((option) => {
 
         if (REQUESTER_USER_MAP.has(convertToAscii(option.value.trim().toUpperCase()))) {
             console.warn("A duplicate found with the same Ulg id, the same lastname, the same firstname : " + option.value.trim() + ".\nThe duplicate will be removed from the datalist.");
-            
+
             DOM.requesterUserList.removeChild(option);
             return;
         }
@@ -148,6 +149,8 @@ const CONFIG = {
     BREADCRUMB_ITEM_CLASS: 'breadcrumb_item'
 };
 
+const interventionFormManager = new InterventionFormManager(document.querySelector(".intervention_details_container .content"));
+
 /**
  * Intervention Detail Management
  * Handles loading and displaying detailed intervention information
@@ -165,7 +168,7 @@ class InterventionDetailManager {
             throw new Error("InterventionId is NULL - ensure row has data-intervention-id attribute");
         }
 
-        this.loadInterventionDetails(interventionId);
+        interventionFormManager.loadInterventionDetails(interventionId);
         this.showDetailsPanel();
     }
 
@@ -297,7 +300,7 @@ class FormPopulator {
                 data.requesterUserId
             );
 
-           DOM.requesterUserLink.setAttribute("href", data.requesterUserId);
+            DOM.requesterUserLink.setAttribute("href", data.requesterUserId);
         }
 
         if (data.targetUserId) {
@@ -533,59 +536,6 @@ class EventListeners {
             });
         });
 
-        // Intervention type change handler
-        DOM.interventionTypeSelect.addEventListener("change", () => {
-            InterventionTypeManager.updateSubtypeOptions();
-        });
-
-        // Breadcrumb select handlers
-        DOM.keywordSelect.addEventListener("change", () => {
-            BreadcrumbManager.handleKeywordSelectChange();
-        });
-
-        DOM.helpersSelect.addEventListener("change", () => {
-            BreadcrumbManager.handleHelperSelectChange();
-        });
-
-        // Autocomplete for requester user
-        DOM.requesterUserInput.addEventListener("input", (e) => {
-            const inputValue = convertToAscii(e.target.value.trim().toUpperCase());
-            const registeredOption = REQUESTER_USER_MAP.get(inputValue);
-            if (registeredOption) {
-                DOM.requesterUserInput.value = registeredOption.getAttribute("value");
-                DOM.requesterUserIdInput.value = registeredOption.getAttribute("data-value-id");
-                DOM.requesterUserLink.setAttribute("href", DOM.requesterUserIdInput.value);
-            } else {
-                DOM.requesterUserIdInput.value = "";
-            }
-        });
-
-        // Autocomplete for intervention target user
-        DOM.interventionTargetUserInput.addEventListener("input", (e) => {
-            const inputValue = convertToAscii(e.target.value.trim().toUpperCase());
-            const registeredOption = INTERVENTION_TARGET_USER_MAP.get(inputValue);
-            if (registeredOption) {
-                DOM.interventionTargetUserInput.value = registeredOption.getAttribute("value");
-                DOM.interventionTargetUserIdInput.value = registeredOption.getAttribute("data-value-id");
-                DOM.interventionTargetUserLink.setAttribute("href", DOM.interventionTargetUserIdInput.value);
-            } else {
-                DOM.interventionTargetUserIdInput.value = "";
-            }
-        });
-
-        // Autocomplete for material input
-        DOM.materialInput.addEventListener("input", (e) => {
-            const inputValue = convertToAscii(e.target.value.trim().toUpperCase());
-            const registeredOption = MATERIAL_MAP.get(inputValue);
-            if (registeredOption) {
-                DOM.materialInput.value = registeredOption.getAttribute("value");
-                DOM.materialIdInput.value = registeredOption.getAttribute("data-value-id");
-                DOM.materialLink.setAttribute("href", DOM.materialIdInput.value);
-            } else {
-                DOM.materialIdInput.value = "";
-            }
-        });
-
     }
 }
 
@@ -760,20 +710,14 @@ class App {
      */
     static init() {
         EventListeners.registerAll();
-        InterventionTypeManager.updateSubtypeOptions(); // Initialize subtype options
-
-        // Make BreadcrumbManager globally available for onclick handlers
-        window.BreadcrumbManager = BreadcrumbManager;
-
-        // Make FormDataManager globally available for easy access
-        window.FormDataManager = FormDataManager;
-
-        console.log('Intervention Management System initialized');
     }
 }
 
 // Initialize the application
 App.init();
+
+// const test = new InterventionFormManager(document.querySelector(".intervention_details_container .content"));
+// test.loadInterventionDetails(12162);
 
 
 // Export classes for potential external use
