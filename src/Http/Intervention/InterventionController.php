@@ -2,7 +2,6 @@
 
 namespace App\Http\Intervention;
 
-use App\Database\Database;
 use App\Helpers\NumberHelper;
 use App\Http\Keyword\KeywordService;
 use App\Http\Material\MaterialService;
@@ -30,6 +29,7 @@ class InterventionController
         $keywords = $this->keywordService->getAll();
         $interventionTypes = $this->interventionService->getInterventionTypes();
         $materials = $this->materialService->getAll();
+
 
         return $view->render(
             "intervention/index",

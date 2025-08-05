@@ -7,6 +7,7 @@
 /** @var \App\Http\Intervention\DTOs\InterventionTypeDto[] $interventionTypes */
 /** @var \App\Http\Material\DTOs\MaterialDto[] $materials */
 
+use App\Helpers\StringHelper;
 use App\Http\Intervention\InterventionState;
 ?>
 
@@ -122,7 +123,7 @@ use App\Http\Intervention\InterventionState;
                   <datalist id="requester_user_list">
                      <?php foreach ($users as $user): ?>
                         <?php $requesterUserValue = "[" . $user->ulgId . "] " . $user->firstname . ($user->firstname ? " " : "") . $user->lastname ?>
-                        <option data-value-id="<?= $user->id ?>" value="<?= $requesterUserValue ?>"></option>
+                        <option data-value-id="<?= $user->id ?>" value="<?= $requesterUserValue ?>"><?=StringHelper::normalizeToAscii($requesterUserValue)?></option>
                      <?php endforeach; ?>
                   </datalist>
                </div>
@@ -133,7 +134,7 @@ use App\Http\Intervention\InterventionState;
                   <datalist id="intervention_target_user_list">
                      <?php foreach ($users as $user): ?>
                         <?php $requesterUserValue = "[" . $user->ulgId . "] " . $user->firstname . ($user->firstname ? " " : "") . $user->lastname ?>
-                        <option data-value-id="<?= $user->id ?>" value="<?= $requesterUserValue ?>"></option>
+                        <option data-value-id="<?= $user->id ?>" value="<?= $requesterUserValue ?>"><?=StringHelper::normalizeToAscii($requesterUserValue)?></option>
                      <?php endforeach; ?>
                   </datalist>
                </div>
