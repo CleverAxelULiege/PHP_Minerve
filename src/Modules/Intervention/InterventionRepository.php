@@ -19,8 +19,9 @@ class InterventionRepository
         return (int) $this->db->run($sql)->fetchObject()->total;
     }
 
-    public function getPaginatedInterventions(int $page, int $resultsPerPage)
+    public function getPaginatedInterventions(int $page, int $resultsPerPage, array $filterStatus = ["clôturée", "persistant"])
     {
+        $filterStatusMapped = implode(" AND ", array_fill(0, count($filterStatus), "i.status NOT ILIKE ?"));
         $offset = ($page - 1) * $resultsPerPage;
         $sql = "
             SELECT
@@ -42,10 +43,11 @@ class InterventionRepository
             LEFT JOIN intervention_types it_via_subtype ON it_via_subtype.id = ist.intervention_type_id
             LEFT JOIN intervention_types it_direct ON it_direct.id = i.intervention_type_id
             LEFT JOIN materials m ON m.id = i.material_id
+            WHERE $filterStatusMapped
             ORDER BY i.id DESC
             LIMIT ? OFFSET ?
             ";
-        $interventions = $this->db->run($sql, [$resultsPerPage, $offset])->fetchAll();
+        $interventions = $this->db->run($sql, [...$filterStatus, $resultsPerPage, $offset])->fetchAll();
         $interventionIds = array_column($interventions, 'id');
         $userIds = array_column($interventions, 'intervention_target_user_id');
         $allHelpers = $this->getBatchHelpers($interventionIds);
