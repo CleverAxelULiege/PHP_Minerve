@@ -70,6 +70,13 @@ tr:nth-child(even) td {
     }
 }
 
+/*It's a desktop/laptop application, if their screen is smaller than that for the side panel, they will have an overflow on the x axis*/
+@media only screen and (max-width: 1450px) {
+    .intervention_details_container {
+        width: 500px;
+    }
+}
+
 .intervention_details_container .content {
     padding: 10px;
     transition: all 100ms ease-in-out;
