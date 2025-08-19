@@ -2,8 +2,8 @@
 
 require(__DIR__ . "/Database.php");
 
-$newDb = new Database("localhost", "new_udi6", "5432", "postgres", "admin");
-$oldDb = new Database("localhost", "old_udi2", "5432", "postgres", "admin");
+$newDb = new Database("localhost", "new_udi", "5432", "postgres", "admin");
+$oldDb = new Database("localhost", "old_udi", "5432", "postgres", "admin");
 
 try{
     $newDb->beginTransaction();
@@ -19,6 +19,7 @@ try{
     echo "err";
     $newDb->rollbackTransaction();
 }
+
 
 try{
     $newDb->beginTransaction();

@@ -6,6 +6,10 @@ class DatePicker {
         this.rootElement = datePickerElement;
         this.addTimeSelection = this.rootElement.getAttribute("data-add-time") == "true";
         this.addDefaultDateIfEmpty = this.rootElement.getAttribute("data-default-date-if-empty") == "true";
+
+        //able to escape the "flow" or the overflow hidden of the document at the cost of calculation
+        this.isFixed = this.rootElement.getAttribute("data-is-fixed") == "true";
+
         this.minuteSelectStep = 5;
         this.buildBaseDatePicker();
 
@@ -58,6 +62,59 @@ class DatePicker {
         this.buildOptionsInSelect();
         this.initSelectedDateFromInput();
         this.selectOptionsFromMonthInDisplay();
+
+        /**@type {HTMLElement | null} */
+        this.scrollParent = null;
+        if (this.isFixed) {
+            this.scrollParent = this.getScrollParent(this.rootElement);
+            this.recalculateFixedPosition();
+        }
+    }
+
+    recalculateFixedPosition() {
+        
+        this.scrollParent.addEventListener("scroll", () => {
+            const rect = this.rootElement.getBoundingClientRect();
+            const calendarRect = this.calendar.getBoundingClientRect();
+            
+            let widthDelta = calendarRect.width - rect.width;
+            if(widthDelta < 0) {
+                widthDelta = 0;
+            }
+             
+            this.calendar.style.top = (rect.bottom + 5) + "px";
+            this.calendar.style.left = (rect.x - widthDelta) + "px";
+        });
+
+        window.addEventListener("resize", () => {
+            const rect = this.rootElement.getBoundingClientRect();
+            const calendarRect = this.calendar.getBoundingClientRect();
+            
+            let widthDelta = calendarRect.width - rect.width;
+            if(widthDelta < 0) {
+                widthDelta = 0;
+            }
+             
+            this.calendar.style.top = rect.bottom + "px";
+            this.calendar.style.left = (rect.x - widthDelta) + "px";
+        });
+    }
+
+    getScrollParent(element, includeHidden) {
+        let style = getComputedStyle(element);
+        let excludeStaticParent = style.position === "absolute";
+        let overflowRegex = includeHidden ? /(auto|scroll|hidden)/ : /(auto|scroll)/;
+
+        if (style.position === "fixed") return document.body;
+        for (let parent = element; (parent = parent.parentElement);) {
+            style = getComputedStyle(parent);
+            if (excludeStaticParent && style.position === "static") {
+                continue;
+            }
+            if (overflowRegex.test(style.overflow + style.overflowY + style.overflowX)) return parent;
+        }
+
+        return document.body;
     }
 
     buildBaseDatePicker() {
@@ -68,7 +125,7 @@ class DatePicker {
                 <path d="M128 0c17.7 0 32 14.3 32 32l0 32 128 0 0-32c0-17.7 14.3-32 32-32s32 14.3 32 32l0 32 32 0c35.3 0 64 28.7 64 64l0 288c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 128C0 92.7 28.7 64 64 64l32 0 0-32c0-17.7 14.3-32 32-32zM64 240l0 32c0 8.8 7.2 16 16 16l32 0c8.8 0 16-7.2 16-16l0-32c0-8.8-7.2-16-16-16l-32 0c-8.8 0-16 7.2-16 16zm128 0l0 32c0 8.8 7.2 16 16 16l32 0c8.8 0 16-7.2 16-16l0-32c0-8.8-7.2-16-16-16l-32 0c-8.8 0-16 7.2-16 16zm144-16c-8.8 0-16 7.2-16 16l0 32c0 8.8 7.2 16 16 16l32 0c8.8 0 16-7.2 16-16l0-32c0-8.8-7.2-16-16-16l-32 0zM64 368l0 32c0 8.8 7.2 16 16 16l32 0c8.8 0 16-7.2 16-16l0-32c0-8.8-7.2-16-16-16l-32 0c-8.8 0-16 7.2-16 16zm144-16c-8.8 0-16 7.2-16 16l0 32c0 8.8 7.2 16 16 16l32 0c8.8 0 16-7.2 16-16l0-32c0-8.8-7.2-16-16-16l-32 0zm112 16l0 32c0 8.8 7.2 16 16 16l32 0c8.8 0 16-7.2 16-16l0-32c0-8.8-7.2-16-16-16l-32 0c-8.8 0-16 7.2-16 16z" />
             </svg>
         </button>
-        <div class="calendar " id="calendar">
+        <div class="calendar ${this.isFixed ? "fixed" : ""}" id="calendar">
             <div class="calendar_header">
                 <button class="nav_button" type="button" id="prev_month_button">‹</button>
                 <div class="month_year" id="month_year_display">
@@ -319,7 +376,7 @@ class DatePicker {
     handleInputBlur(e) {
         const value = this.input.value.trim();
 
-        if(value == "" && !this.addDefaultDateIfEmpty){
+        if (value == "" && !this.addDefaultDateIfEmpty) {
             this.input.classList.remove("invalid");
             return;
         }

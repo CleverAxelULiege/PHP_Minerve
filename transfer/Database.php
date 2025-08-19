@@ -1,10 +1,7 @@
 <?php
 
-namespace App\Database;
-use PDO;
-
 define("DATABASE_HOST", "localhost");
-define("DATABASE_NAME", "new_udi");
+define("DATABASE_NAME", "new_udi6");
 define("DATABASE_PORT", "5432");
 define("DATABASE_USER", "postgres");
 define("DATABASE_PASSWORD", "admin");

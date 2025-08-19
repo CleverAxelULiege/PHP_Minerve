@@ -3,22 +3,29 @@
 namespace App\Routing;
 
 use App\Database\Database;
-use App\Http\Intervention\InterventionController;
-use App\Http\Intervention\InterventionRepository;
-use App\Http\Intervention\InterventionService;
-use App\Http\Keyword\KeywordRepository;
-use App\Http\Keyword\KeywordService;
-use App\Http\Material\MaterialRepository;
-use App\Http\Material\MaterialService;
+use App\Modules\Home\HomeController;
+use App\Modules\Intervention\InterventionController;
+use App\Modules\Intervention\InterventionRepository;
+use App\Modules\Intervention\InterventionService;
+use App\Modules\Keyword\KeywordRepository;
+use App\Modules\Keyword\KeywordService;
+use App\Modules\Material\MaterialRepository;
+use App\Modules\Material\MaterialService;
 use App\Routing\Router;
-use App\Http\User\UserController;
-use App\Http\User\UserRepository;
-use App\Http\User\UserService;
+use App\Modules\User\UserController;
+use App\Modules\User\UserRepository;
+use App\Modules\User\UserService;
 
 class Routes
 {
     public static function register(Router $router)
     {
+        $router->get("/", function() {
+            $homeController = new HomeController();
+
+            return $homeController->index();
+        });
+
         $router->get('/intervention', function () {
             $database = new Database();
 

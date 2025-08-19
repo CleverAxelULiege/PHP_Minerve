@@ -1,0 +1,11 @@
+To restore database :
+DROP SCHEMA public CASCADE;
+CREATE SCHEMA public;
+GRANT ALL ON SCHEMA public TO postgres;
+
+CREATE ROLE admin_postgres LOGIN PASSWORD 'admin';
+ALTER ROLE admin_postgres CREATEDB CREATEROLE SUPERUSER;
+
+CREATE ROLE user_postgres WITH LOGIN PASSWORD 'admin';
+
+psql -U postgres -d old_udi < udifapse-backup.psql

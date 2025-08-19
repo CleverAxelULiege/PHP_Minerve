@@ -89,7 +89,7 @@ class ViewRender
     public function showSection(string $name, string $default = ''): string
     {
         $result = $this->sections[$name] ?? $default;
-        error_log("ShowSection called for '{$name}': " . ($result ? "'{$result}'" : 'EMPTY/DEFAULT'));
+        // error_log("ShowSection called for '{$name}': " . ($result ? "'{$result}'" : 'EMPTY/DEFAULT'));
         return $result;
     }
 

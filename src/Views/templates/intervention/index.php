@@ -1,14 +1,14 @@
 <?php
 
-/** @var \App\Support\PaginatedResult<\App\Http\Intervention\DTOs\InterventionDto> $paginatedResults */
-/** @var \App\Http\User\DTOs\UserStaffDto[] $udiStaff */
-/** @var \App\Http\User\DTOs\UserDto[] $users */
-/** @var \App\Http\Keyword\DTOs\KeywordDto[] $keywords */
-/** @var \App\Http\Intervention\DTOs\InterventionTypeDto[] $interventionTypes */
-/** @var \App\Http\Material\DTOs\MaterialDto[] $materials */
+/** @var \App\Support\PaginatedResult<\App\Modules\Intervention\DTOs\InterventionDto> $paginatedResults */
+/** @var \App\Modules\User\DTOs\UserStaffDto[] $udiStaff */
+/** @var \App\Modules\User\DTOs\UserDto[] $users */
+/** @var \App\Modules\Keyword\DTOs\KeywordDto[] $keywords */
+/** @var \App\Modules\Intervention\DTOs\InterventionTypeDto[] $interventionTypes */
+/** @var \App\Modules\Material\DTOs\MaterialDto[] $materials */
 
 use App\Helpers\StringHelper;
-use App\Http\Intervention\InterventionState;
+use App\Modules\Intervention\InterventionState;
 ?>
 
 <?php $this->extend('layout') ?>
@@ -34,9 +34,9 @@ use App\Http\Intervention\InterventionState;
                   <th>Id</th>
                   <th>Date</th>
                   <th>Personne</th>
-                  <th>Service</th>
+                  <th class="service_column">Service</th>
                   <th>Intervenants</th>
-                  <th>Sujet</th>
+                  <th class="category_column">Sujet</th>
                   <th>Titre</th>
                   <th>Status</th>
                </tr>
@@ -59,7 +59,7 @@ use App\Http\Intervention\InterventionState;
 
                      </td>
                      <td><?= $this->escape($intervention->targetUserName) ?></td>
-                     <td>
+                     <td class="service_column">
                         <?php foreach ($intervention->services as $service): ?>
                            <div><span><?= $this->escape($service->name) ?></span></div>
                         <?php endforeach ?>
@@ -70,7 +70,7 @@ use App\Http\Intervention\InterventionState;
                            <div><span><?= $this->escape($this->truncate($helper->surname, 4, "")) ?></span></div>
                         <?php endforeach ?>
                      </td>
-                     <td><?= $this->escape($intervention->subtypeName ?? $intervention->typeName ?? "-") ?></td>
+                     <td class="category_column"><?= $this->escape($intervention->subtypeName ?? $intervention->typeName ?? "-") ?></td>
                      <td><?= $this->escape($this->truncate($intervention->title ?? "-", 30)) ?></td>
                      <td>
 
@@ -196,13 +196,13 @@ use App\Http\Intervention\InterventionState;
             <div class="form_row">
                <div class="form_group">
                   <label for="intervention_date">Intervention prévue le</label>
-                  <div class="date_picker" data-min-year="2000" data-max-year="2030" data-add-time="true" data-default-date-if-empty="false">
+                  <div class="date_picker" data-min-year="2000" data-max-year="2030" data-is-fixed="true" data-add-time="true" data-default-date-if-empty="false">
                      <input type="text" id="intervention_date" value="" name="intervention_date">
                   </div>
                </div>
                <div class="form_group">
                   <label for="agenda_date">Agenda</label>
-                  <div class="date_picker" data-min-year="2000" data-max-year="2030" data-add-time="true" data-default-date-if-empty="false">
+                  <div class="date_picker" data-min-year="2000" data-max-year="2030" data-is-fixed="true" data-add-time="true" data-default-date-if-empty="false">
                      <input type="text" id="agenda_date" name="agenda_date" value="">
                   </div>
                </div>

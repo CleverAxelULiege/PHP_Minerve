@@ -51,9 +51,10 @@ tr:nth-child(even) td {
     top: 0;
     left: 0;
     background-color: white;
+    flex-shrink: 0;
     height: 100vh;
     overflow-y: auto;
-    flex-shrink: 0;
+    overflow-x: visible;
     transition: width 150ms ease-in-out;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     width: 700px;
@@ -61,6 +62,12 @@ tr:nth-child(even) td {
 
 .intervention_details_container.hidden {
     width: 0;
+}
+
+@media only screen and (max-width: 1600px) {
+    .intervention_details_container {
+        width: 600px;
+    }
 }
 
 .intervention_details_container .content {
@@ -85,6 +92,7 @@ tr:nth-child(even) td {
     padding: 10px 0;
     border-bottom: 1px solid #c4c4c4;
 }
+
 .intervention_details_container .content h2 a {
     color: var(--text-info);
     display: flex;
@@ -92,7 +100,8 @@ tr:nth-child(even) td {
     align-items: center;
     justify-content: center;
 }
-.intervention_details_container .content h2 a svg{
+
+.intervention_details_container .content h2 a svg {
     fill: var(--text-info);
     width: 44px;
 }
