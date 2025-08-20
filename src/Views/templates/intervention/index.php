@@ -275,6 +275,69 @@ use App\Modules\Intervention\Const\InterventionState;
                <textarea id="solution" name="solution" rows="4"></textarea>
             </div>
 
+            <hr class="message_separator">
+
+
+            <!-- MESSAGE -->
+            <h3 class="message_title">
+               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
+                  <path d="M64 416L64 192C64 139 107 96 160 96L480 96C533 96 576 139 576 192L576 416C576 469 533 512 480 512L360 512C354.8 512 349.8 513.7 345.6 516.8L230.4 603.2C226.2 606.3 221.2 608 216 608C202.7 608 192 597.3 192 584L192 512L160 512C107 512 64 469 64 416z" />
+               </svg>
+               Messages :
+            </h3>
+
+            <div class="messages_container">
+
+               <div class="message_container">
+                  <div class="message_header">
+                     <div class="message_meta">
+                        <div class="author_info">
+                           <div class="author_avatar">JD</div>
+                           <div>
+                              <div class="author_name">John Doe</div>
+                              <div class="message_date">March 15, 2024 at 2:30 PM</div>
+                           </div>
+                        </div>
+                        <div class="visibility_indicator visibility_public">
+                           <svg class="visibility_icon" fill="currentColor" viewBox="0 0 20 20">
+                              <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                              <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
+                           </svg>
+                           Publique
+                        </div>
+                     </div>
+                  </div>
+                  <div class="message_content">
+                     <p>This is a sample message post that demonstrates the styling. The design is clean and modern, with proper spacing and typography that's easy to read.</p>
+                     <p>The header contains all the metadata including author, date, and visibility status, while the content area provides a comfortable reading experience.</p>
+                  </div>
+               </div>
+
+               <!-- Example of a private post -->
+               <div class="message_container" style="margin-top: 20px;">
+                  <div class="message_header">
+                     <div class="message_meta">
+                        <div class="author_info">
+                           <div class="author_avatar" style="background-color: blue;">AS</div>
+                           <div>
+                              <div class="author_name">Alice Smith</div>
+                              <div class="message_date">March 14, 2024 at 11:45 AM</div>
+                           </div>
+                        </div>
+                        <div class="visibility_indicator visibility_private">
+                           <svg class="visibility_icon" fill="currentColor" viewBox="0 0 20 20">
+                              <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
+                           </svg>
+                           Visible pour l'UDI <br>uniquement.
+                        </div>
+                     </div>
+                  </div>
+                  <div class="message_content">
+                     <p>This is an example of a private comment post. Notice how the visibility indicator changes color and icon to reflect the privacy status.</p>
+                  </div>
+               </div>
+            </div>
+
             <button type="submit" class="btn">Soumettre la demande</button>
          </form>
       </div>
