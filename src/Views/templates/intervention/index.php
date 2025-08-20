@@ -100,9 +100,17 @@ use App\Modules\Intervention\Const\InterventionState;
       </div>
    </div>
 
-   <div class="intervention_details_container hidden">
-      <div class="content hidden">
 
+   <!-- SIDE PANEL when clicking on a row -->
+   <div class="intervention_details_container ">
+      <div class="content ">
+         <div class="close_button_container">
+            <button title="Rabattre le panneau latéral" id="close_intervention_details_container_button">
+               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><!--!Font Awesome Free v7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+                  <path d="M409 337C418.4 327.6 418.4 312.4 409 303.1L265 159C258.1 152.1 247.8 150.1 238.8 153.8C229.8 157.5 224 166.3 224 176L224 256L112 256C85.5 256 64 277.5 64 304L64 336C64 362.5 85.5 384 112 384L224 384L224 464C224 473.7 229.8 482.5 238.8 486.2C247.8 489.9 258.1 487.9 265 481L409 337zM416 480C398.3 480 384 494.3 384 512C384 529.7 398.3 544 416 544L480 544C533 544 576 501 576 448L576 192C576 139 533 96 480 96L416 96C398.3 96 384 110.3 384 128C384 145.7 398.3 160 416 160L480 160C497.7 160 512 174.3 512 192L512 448C512 465.7 497.7 480 480 480L416 480z" />
+               </svg>
+            </button>
+         </div>
          <h2 id="intervention_title"><a href="#">Intervention #1230</a></h2>
          <form id="intervention_form">
             <div class="form_row">
@@ -118,31 +126,37 @@ use App\Modules\Intervention\Const\InterventionState;
 
             <div class="form_row">
                <div class="form_group">
-                  <label for="requester_user">Demandeur <a target="_blank" href="#"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path d="M384 64C366.3 64 352 78.3 352 96C352 113.7 366.3 128 384 128L466.7 128L265.3 329.4C252.8 341.9 252.8 362.2 265.3 374.7C277.8 387.2 298.1 387.2 310.6 374.7L512 173.3L512 256C512 273.7 526.3 288 544 288C561.7 288 576 273.7 576 256L576 96C576 78.3 561.7 64 544 64L384 64zM144 160C99.8 160 64 195.8 64 240L64 496C64 540.2 99.8 576 144 576L400 576C444.2 576 480 540.2 480 496L480 416C480 398.3 465.7 384 448 384C430.3 384 416 398.3 416 416L416 496C416 504.8 408.8 512 400 512L144 512C135.2 512 128 504.8 128 496L128 240C128 231.2 135.2 224 144 224L224 224C241.7 224 256 209.7 256 192C256 174.3 241.7 160 224 160L144 160z"/></svg></a></label>
+                  <label for="requester_user">Demandeur <a target="_blank" href="#"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
+                           <path d="M384 64C366.3 64 352 78.3 352 96C352 113.7 366.3 128 384 128L466.7 128L265.3 329.4C252.8 341.9 252.8 362.2 265.3 374.7C277.8 387.2 298.1 387.2 310.6 374.7L512 173.3L512 256C512 273.7 526.3 288 544 288C561.7 288 576 273.7 576 256L576 96C576 78.3 561.7 64 544 64L384 64zM144 160C99.8 160 64 195.8 64 240L64 496C64 540.2 99.8 576 144 576L400 576C444.2 576 480 540.2 480 496L480 416C480 398.3 465.7 384 448 384C430.3 384 416 398.3 416 416L416 496C416 504.8 408.8 512 400 512L144 512C135.2 512 128 504.8 128 496L128 240C128 231.2 135.2 224 144 224L224 224C241.7 224 256 209.7 256 192C256 174.3 241.7 160 224 160L144 160z" />
+                        </svg></a></label>
                   <input type="text" id="requester_user" name="requester_user" list="requester_user_list">
                   <input type="hidden" id="requester_user_id" name="requester_user_id">
                   <datalist id="requester_user_list">
                      <?php foreach ($users as $user): ?>
                         <?php $requesterUserValue = "[" . $user->ulgId . "] " . $user->firstname . ($user->firstname ? " " : "") . $user->lastname ?>
-                        <option data-value-id="<?= $user->id ?>" value="<?= $requesterUserValue ?>"><?=StringHelper::normalizeToAscii($requesterUserValue)?></option>
+                        <option data-value-id="<?= $user->id ?>" value="<?= $requesterUserValue ?>"><?= StringHelper::normalizeToAscii($requesterUserValue) ?></option>
                      <?php endforeach; ?>
                   </datalist>
                </div>
                <div class="form_group">
-                  <label for="intervention_target_user">Intervention pour <a target="_blank" href="#"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path d="M384 64C366.3 64 352 78.3 352 96C352 113.7 366.3 128 384 128L466.7 128L265.3 329.4C252.8 341.9 252.8 362.2 265.3 374.7C277.8 387.2 298.1 387.2 310.6 374.7L512 173.3L512 256C512 273.7 526.3 288 544 288C561.7 288 576 273.7 576 256L576 96C576 78.3 561.7 64 544 64L384 64zM144 160C99.8 160 64 195.8 64 240L64 496C64 540.2 99.8 576 144 576L400 576C444.2 576 480 540.2 480 496L480 416C480 398.3 465.7 384 448 384C430.3 384 416 398.3 416 416L416 496C416 504.8 408.8 512 400 512L144 512C135.2 512 128 504.8 128 496L128 240C128 231.2 135.2 224 144 224L224 224C241.7 224 256 209.7 256 192C256 174.3 241.7 160 224 160L144 160z"/></svg></a></label>
+                  <label for="intervention_target_user">Intervention pour <a target="_blank" href="#"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
+                           <path d="M384 64C366.3 64 352 78.3 352 96C352 113.7 366.3 128 384 128L466.7 128L265.3 329.4C252.8 341.9 252.8 362.2 265.3 374.7C277.8 387.2 298.1 387.2 310.6 374.7L512 173.3L512 256C512 273.7 526.3 288 544 288C561.7 288 576 273.7 576 256L576 96C576 78.3 561.7 64 544 64L384 64zM144 160C99.8 160 64 195.8 64 240L64 496C64 540.2 99.8 576 144 576L400 576C444.2 576 480 540.2 480 496L480 416C480 398.3 465.7 384 448 384C430.3 384 416 398.3 416 416L416 496C416 504.8 408.8 512 400 512L144 512C135.2 512 128 504.8 128 496L128 240C128 231.2 135.2 224 144 224L224 224C241.7 224 256 209.7 256 192C256 174.3 241.7 160 224 160L144 160z" />
+                        </svg></a></label>
                   <input type="text" id="intervention_target_user" name="intervention_target_user" list="intervention_target_user_list">
                   <input type="hidden" id="intervention_target_user_id" name="intervention_target_user_id">
                   <datalist id="intervention_target_user_list">
                      <?php foreach ($users as $user): ?>
                         <?php $requesterUserValue = "[" . $user->ulgId . "] " . $user->firstname . ($user->firstname ? " " : "") . $user->lastname ?>
-                        <option data-value-id="<?= $user->id ?>" value="<?= $requesterUserValue ?>"><?=StringHelper::normalizeToAscii($requesterUserValue)?></option>
+                        <option data-value-id="<?= $user->id ?>" value="<?= $requesterUserValue ?>"><?= StringHelper::normalizeToAscii($requesterUserValue) ?></option>
                      <?php endforeach; ?>
                   </datalist>
                </div>
             </div>
 
             <div class="form_group">
-               <label for="material">Intervention pour le matériel <a target="_blank" href="#"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><path d="M384 64C366.3 64 352 78.3 352 96C352 113.7 366.3 128 384 128L466.7 128L265.3 329.4C252.8 341.9 252.8 362.2 265.3 374.7C277.8 387.2 298.1 387.2 310.6 374.7L512 173.3L512 256C512 273.7 526.3 288 544 288C561.7 288 576 273.7 576 256L576 96C576 78.3 561.7 64 544 64L384 64zM144 160C99.8 160 64 195.8 64 240L64 496C64 540.2 99.8 576 144 576L400 576C444.2 576 480 540.2 480 496L480 416C480 398.3 465.7 384 448 384C430.3 384 416 398.3 416 416L416 496C416 504.8 408.8 512 400 512L144 512C135.2 512 128 504.8 128 496L128 240C128 231.2 135.2 224 144 224L224 224C241.7 224 256 209.7 256 192C256 174.3 241.7 160 224 160L144 160z"/></svg></a></label>
+               <label for="material">Intervention pour le matériel <a target="_blank" href="#"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
+                        <path d="M384 64C366.3 64 352 78.3 352 96C352 113.7 366.3 128 384 128L466.7 128L265.3 329.4C252.8 341.9 252.8 362.2 265.3 374.7C277.8 387.2 298.1 387.2 310.6 374.7L512 173.3L512 256C512 273.7 526.3 288 544 288C561.7 288 576 273.7 576 256L576 96C576 78.3 561.7 64 544 64L384 64zM144 160C99.8 160 64 195.8 64 240L64 496C64 540.2 99.8 576 144 576L400 576C444.2 576 480 540.2 480 496L480 416C480 398.3 465.7 384 448 384C430.3 384 416 398.3 416 416L416 496C416 504.8 408.8 512 400 512L144 512C135.2 512 128 504.8 128 496L128 240C128 231.2 135.2 224 144 224L224 224C241.7 224 256 209.7 256 192C256 174.3 241.7 160 224 160L144 160z" />
+                     </svg></a></label>
                <input type="text" id="material" name="material" list="material_list">
                <input type="hidden" id="material_id" name="material_id">
                <datalist id="material_list">

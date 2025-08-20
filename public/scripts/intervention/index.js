@@ -5,8 +5,9 @@ const DOM = {
     interventionRows: document.querySelectorAll(".intervention_row"),
     interventionDetailsContainer: document.querySelector(".intervention_details_container"),
     interventionDetailsContent: document.querySelector(".intervention_details_container .content"),
-    serviceColumns : document.querySelectorAll(".service_column"),
-    categoryColumns : document.querySelectorAll(".category_column"),
+    serviceColumns: document.querySelectorAll(".service_column"),
+    categoryColumns: document.querySelectorAll(".category_column"),
+    closeInterventionDetailsPanelButton: document.querySelector("#close_intervention_details_container_button")
 };
 
 const interventionFormManager = new InterventionFormManager(document.querySelector(".intervention_details_container .content"));
@@ -46,10 +47,18 @@ class InterventionDetailManager {
             DOM.interventionDetailsContainer.ontransitionend = null;
             if (!DOM.interventionDetailsContainer.classList.contains("hidden")) {
                 DOM.interventionDetailsContent.classList.remove("hidden");
-                DOM.serviceColumns.forEach((col) => {col.style.display = "none"});
-                DOM.categoryColumns.forEach((col) => {col.style.display = "none"});
+                DOM.serviceColumns.forEach((col) => { col.style.display = "none" });
+                DOM.categoryColumns.forEach((col) => { col.style.display = "none" });
             }
         };
+    }
+
+    static hideDetailsPanel() {
+        DOM.interventionDetailsContainer.classList.add("hidden");
+        DOM.interventionDetailsContent.classList.add("hidden");
+
+        DOM.serviceColumns.forEach((col) => { col.style.display = "" });
+        DOM.categoryColumns.forEach((col) => { col.style.display = "" });
     }
 }
 
@@ -69,6 +78,10 @@ class EventListeners {
                 InterventionDetailManager.handleRowClick(row);
             });
         });
+
+        DOM.closeInterventionDetailsPanelButton.addEventListener("click", () => {
+            InterventionDetailManager.hideDetailsPanel();
+        })
 
     }
 }

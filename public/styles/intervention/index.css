@@ -93,6 +93,32 @@ tr:nth-child(even) td {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+.intervention_details_container .close_button_container {
+    display: flex;
+    justify-content: start;
+    align-items: start;
+}
+.intervention_details_container .close_button_container button {
+    display: flex;
+    justify-content: start;
+    align-items: start;
+    width: 40px;
+    background-color: transparent;
+    border-style: none;
+    outline: none;
+    cursor: pointer;
+
+}
+.intervention_details_container .close_button_container button svg{
+    width: 100%;
+    transition: all 150ms ease-in-out;
+}
+.intervention_details_container .close_button_container button:hover svg{
+    fill: #c22626;
+}
+
+
+
 .intervention_details_container .content.hidden {
     opacity: 0;
 
