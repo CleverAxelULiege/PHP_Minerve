@@ -72,8 +72,18 @@ class EventListeners {
      * Registers all event listeners
      */
     static registerAll() {
+
         // Intervention row click handlers
         DOM.interventionRows.forEach(row => {
+            row.querySelectorAll("a").forEach((link) => {
+                link.addEventListener("click", (e) => e.preventDefault());
+            });
+
+            row.addEventListener("dblclick", () => {
+                console.log("double click TO DO REDIRECT");
+                
+            });
+
             row.addEventListener("click", () => {
                 InterventionDetailManager.handleRowClick(row);
             });
