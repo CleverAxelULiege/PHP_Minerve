@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Intervention;
+namespace App\Modules\Intervention\Const;
 
 class InterventionState
 {

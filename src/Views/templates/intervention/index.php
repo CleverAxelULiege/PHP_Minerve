@@ -8,7 +8,7 @@
 /** @var \App\Modules\Material\DTOs\MaterialDto[] $materials */
 
 use App\Helpers\StringHelper;
-use App\Modules\Intervention\InterventionState;
+use App\Modules\Intervention\Const\InterventionState;
 ?>
 
 <?php $this->extend('layout') ?>
@@ -99,7 +99,7 @@ use App\Modules\Intervention\InterventionState;
          </table>
       </div>
    </div>
-   
+
    <div class="intervention_details_container hidden">
       <div class="content hidden">
 

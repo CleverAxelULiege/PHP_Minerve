@@ -192,14 +192,20 @@ export class InterventionFormManager {
     populateDates(data) {
         if (data.requestDate) {
             this.DOM.createdAt.textContent = formatDate(new Date(data.requestDate), CONFIG.SHOW_TIME_IN_DATES);
+        } else {
+            this.DOM.createdAt.textContent = "";
         }
 
         if (data.updatedAt) {
             this.DOM.updatedAt.textContent = formatDate(new Date(data.updatedAt), CONFIG.SHOW_TIME_IN_DATES);
+        } else {
+            this.DOM.updatedAt.textContent = "";
         }
 
         if (data.interventionDate) {
-            this.DOM.interventionDate.textContent = formatDate(new Date(data.interventionDate), CONFIG.SHOW_TIME_IN_DATES);
+            this.DOM.interventionDate.value = formatDate(new Date(data.interventionDate), CONFIG.SHOW_TIME_IN_DATES);
+        } else {
+            this.DOM.interventionDate.value = "";
         }
     }
 
@@ -217,6 +223,10 @@ export class InterventionFormManager {
             );
 
             this.DOM.requesterUserLink.setAttribute("href", data.requesterUserId);
+        } else {
+            this.DOM.requesterUserInput.value = "";
+            this.DOM.requesterUserIdInput.value = "";
+            this.DOM.requesterUserLink.setAttribute("href", "#");
         }
 
         if (data.targetUserId) {
@@ -228,6 +238,10 @@ export class InterventionFormManager {
             );
 
             this.DOM.interventionTargetUserLink.setAttribute("href", data.targetUserId);
+        } else {
+            this.DOM.interventionTargetUserInput.value = "";
+            this.DOM.interventionTargetUserIdInput.value = "";
+            this.DOM.interventionTargetUserLink.setAttribute("href", "#");
         }
     }
 
@@ -245,6 +259,10 @@ export class InterventionFormManager {
             );
 
             this.DOM.materialLink.setAttribute("href", data.materialId);
+        } else {
+            this.DOM.materialInput.value = "";
+            this.DOM.materialIdInput.value = "";
+            this.DOM.materialLink.setAttribute("href", "#");
         }
     }
 
@@ -255,6 +273,12 @@ export class InterventionFormManager {
     populateInterventionTypes(data) {
         if (data.typeId) {
             const option = this.DOM.interventionTypeSelect.querySelector(`[value="${data.typeId}"]`);
+            if (option) {
+                option.selected = true;
+                this.updateSubtypeOptions();
+            }
+        } else {
+            const option = this.DOM.interventionTypeSelect.querySelector(`[value=""]`);
             if (option) {
                 option.selected = true;
                 this.updateSubtypeOptions();
@@ -278,12 +302,16 @@ export class InterventionFormManager {
             data.keywords.forEach(keyword => {
                 this.addBreadcrumbItem(keyword.name, keyword.id, this.DOM.breadcrumbKeywords);
             });
+        } else {
+            this.DOM.breadcrumbKeywords.innerHTML = "";
         }
 
         if (data.helpers) {
             data.helpers.forEach(helper => {
                 this.addBreadcrumbItem(helper.surname, helper.id, this.DOM.breadcrumbHelpers);
             });
+        } else {
+            this.DOM.breadcrumbHelpers.innerHTML = "";
         }
     }
 
@@ -296,6 +324,10 @@ export class InterventionFormManager {
             this.DOM.statusRadios.forEach(status => {
                 status.checked = (data.status == status.value);
             });
+        } else {
+            this.DOM.statusRadios.forEach(status => {
+                status.checked = false
+            });
         }
     }
 
@@ -307,18 +339,26 @@ export class InterventionFormManager {
         if (data.description) {
             this.DOM.problemDescription.textContent = data.description;
             this.DOM.problemDescription.innerHTML = this.DOM.problemDescription.textContent.replace(/\r\n/g, "<br />");
+        } else {
+            this.DOM.problemDescription.textContent = "";
         }
 
         if (data.title) {
             this.DOM.title.value = data.title;
+        } else {
+            this.DOM.title.value = "";
         }
 
         if (data.comments) {
             this.DOM.comments.value = data.comments;
+        } else {
+            this.DOM.comments.value = "";
         }
 
         if (data.solution) {
             this.DOM.solution.value = data.solution;
+        } else {
+            this.DOM.solution.value = "";
         }
     }
 
