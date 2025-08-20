@@ -401,7 +401,39 @@ export class InterventionFormManager {
                 }
             }
 
-            
+            let messageContainer = document.createElement("div");
+            messageContainer.classList.add("message_container");
+            if (isPublic) {
+                messageContainer.innerHTML =
+                    `
+                <div class="message_header">
+                     <div class="message_meta">
+                        <div class="author_info">
+                           <div class="author_avatar">JD</div>
+                           <div>
+                              <div class="author_name">${msgAuthorFirstname} ${msgAuthorLastName}</div>
+                              <div class="message_date">March 15, 2024 at 2:30 PM</div>
+                           </div>
+                        </div>
+                        <div class="visibility_indicator visibility_public">
+                           <svg class="visibility_icon" fill="currentColor" viewBox="0 0 20 20">
+                              <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                              <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
+                           </svg>
+                           Publique
+                        </div>
+                     </div>
+                  </div>
+                  <div class="message_content">
+                     <p>This is a sample message post that demonstrates the styling. The design is clean and modern, with proper spacing and typography that's easy to read.</p>
+                     <p>The header contains all the metadata including author, date, and visibility status, while the content area provides a comfortable reading experience.</p>
+                  </div>
+                `
+            } else {
+
+            }
+
+
 
 
         })
