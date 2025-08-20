@@ -45,57 +45,81 @@ use App\Modules\Intervention\Const\InterventionState;
                <?php
                $interventions = $paginatedResults->data;
                foreach ($interventions as $intervention):
+                  $interventionUrl = $intervention->id; // adapt if you need a full URL (e.g., "/intervention/$id")
                ?>
                   <tr class="intervention_row" data-intervention-id="<?= $this->escape($intervention->id) ?>">
-                     <td><b><?= $intervention->id ?></b></td>
+
+                     <td>
+                        <a href="<?= $this->escape($interventionUrl) ?>">
+                           <b><?= $this->escape($intervention->id) ?></b>
+                        </a>
+                     </td>
+
                      <td>
                         <?php
                         $datetime = DateTime::createFromFormat("Y-m-d H:i:s", $intervention->requestDate);
                         $date = $this->escape($datetime->format("d/m/Y"));
                         $time = $this->escape($datetime->format("H:i"));
-                        echo "<div><b>$date</b></div>";
-                        echo "<div><span>$time</span></div>";
                         ?>
-
+                        <a href="<?= $this->escape($interventionUrl) ?>">
+                           <div><b><?= $date ?></b></div>
+                           <div><span><?= $time ?></span></div>
+                        </a>
                      </td>
-                     <td><?= $this->escape($intervention->targetUserName) ?></td>
+
+                     <td>
+                        <a href="<?= $this->escape($interventionUrl) ?>">
+                           <?= $this->escape($intervention->targetUserName) ?>
+                        </a>
+                     </td>
+
                      <td class="service_column">
-                        <?php foreach ($intervention->services as $service): ?>
-                           <div><span><?= $this->escape($service->name) ?></span></div>
-                        <?php endforeach ?>
+                        <a href="<?= $this->escape($interventionUrl) ?>">
+                           <?php foreach ($intervention->services as $service): ?>
+                              <div><span><?= $this->escape($service->name) ?></span></div>
+                           <?php endforeach ?>
+                        </a>
                      </td>
+
                      <td>
-                        <?php if ($intervention->helpers == []) echo "-" ?>
-                        <?php foreach ($intervention->helpers as $helper): ?>
-                           <div><span><?= $this->escape($this->truncate($helper->surname, 4, "")) ?></span></div>
-                        <?php endforeach ?>
+                        <a href="<?= $this->escape($interventionUrl) ?>">
+                           <?php if ($intervention->helpers == []) echo "-" ?>
+                           <?php foreach ($intervention->helpers as $helper): ?>
+                              <div><span><?= $this->escape($this->truncate($helper->surname, 4, "")) ?></span></div>
+                           <?php endforeach ?>
+                        </a>
                      </td>
-                     <td class="category_column"><?= $this->escape($intervention->subtypeName ?? $intervention->typeName ?? "-") ?></td>
-                     <td><?= $this->escape($this->truncate($intervention->title ?? "-", 30)) ?></td>
+
+                     <td class="category_column">
+                        <a href="<?= $this->escape($interventionUrl) ?>">
+                           <?= $this->escape($intervention->subtypeName ?? $intervention->typeName ?? "-") ?>
+                        </a>
+                     </td>
+
                      <td>
-
-                        <?php if ($intervention->status == InterventionState::RECEIVED): ?>
-
-                           <b class="text_info"><?= $this->escape($intervention->status) ?></b>
-
-                        <?php elseif ($intervention->status == InterventionState::CLOSED): ?>
-
-                           <b class="text_danger"><?= $this->escape($intervention->status) ?></b>
-
-                        <?php elseif ($intervention->status == InterventionState::PERSISTENT): ?>
-
-                           <b class="text_warning"><?= $this->escape($intervention->status) ?></b>
-
-                        <?php elseif ($intervention->status == InterventionState::IN_PROGRESS): ?>
-
-                           <b class="text_success"><?= $this->escape($intervention->status) ?></b>
-
-                        <?php endif; ?>
-
+                        <a href="<?= $this->escape($interventionUrl) ?>">
+                           <?= $this->escape($this->truncate($intervention->title ?? "-", 30)) ?>
+                        </a>
                      </td>
+
+                     <td>
+                        <a href="<?= $this->escape($interventionUrl) ?>">
+                           <?php if ($intervention->status == InterventionState::RECEIVED): ?>
+                              <b class="text_info"><?= $this->escape($intervention->status) ?></b>
+                           <?php elseif ($intervention->status == InterventionState::CLOSED): ?>
+                              <b class="text_danger"><?= $this->escape($intervention->status) ?></b>
+                           <?php elseif ($intervention->status == InterventionState::PERSISTENT): ?>
+                              <b class="text_warning"><?= $this->escape($intervention->status) ?></b>
+                           <?php elseif ($intervention->status == InterventionState::IN_PROGRESS): ?>
+                              <b class="text_success"><?= $this->escape($intervention->status) ?></b>
+                           <?php endif; ?>
+                        </a>
+                     </td>
+
                   </tr>
                <?php endforeach ?>
             </tbody>
+
          </table>
       </div>
    </div>
