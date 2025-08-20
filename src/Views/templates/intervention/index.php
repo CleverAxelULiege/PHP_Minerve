@@ -2,7 +2,6 @@
 
 /** @var \App\Support\PaginatedResult<\App\Modules\Intervention\DTOs\InterventionDto> $paginatedResults */
 /** @var \App\Modules\User\DTOs\UserStaffDto[] $udiStaff */
-/** @var \App\Modules\User\DTOs\UserDto[] $users */
 /** @var \App\Modules\Keyword\DTOs\KeywordDto[] $keywords */
 /** @var \App\Modules\Intervention\DTOs\InterventionTypeDto[] $interventionTypes */
 /** @var \App\Modules\Material\DTOs\MaterialDto[] $materials */
@@ -143,10 +142,7 @@ use App\Modules\Intervention\Const\InterventionState;
                   <input type="text" id="requester_user" name="requester_user" list="requester_user_list">
                   <input type="hidden" id="requester_user_id" name="requester_user_id">
                   <datalist id="requester_user_list">
-                     <?php foreach ($users as $user): ?>
-                        <?php $requesterUserValue = "[" . $user->ulgId . "] " . $user->firstname . ($user->firstname ? " " : "") . $user->lastname ?>
-                        <option data-value-id="<?= $user->id ?>" value="<?= $requesterUserValue ?>"><?= StringHelper::normalizeToAscii($requesterUserValue) ?></option>
-                     <?php endforeach; ?>
+ 
                   </datalist>
                </div>
                <div class="form_group">
@@ -156,10 +152,7 @@ use App\Modules\Intervention\Const\InterventionState;
                   <input type="text" id="intervention_target_user" name="intervention_target_user" list="intervention_target_user_list">
                   <input type="hidden" id="intervention_target_user_id" name="intervention_target_user_id">
                   <datalist id="intervention_target_user_list">
-                     <?php foreach ($users as $user): ?>
-                        <?php $requesterUserValue = "[" . $user->ulgId . "] " . $user->firstname . ($user->firstname ? " " : "") . $user->lastname ?>
-                        <option data-value-id="<?= $user->id ?>" value="<?= $requesterUserValue ?>"><?= StringHelper::normalizeToAscii($requesterUserValue) ?></option>
-                     <?php endforeach; ?>
+
                   </datalist>
                </div>
             </div>

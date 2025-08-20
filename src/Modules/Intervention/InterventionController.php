@@ -7,9 +7,7 @@ use App\Modules\Keyword\KeywordService;
 use App\Modules\Material\MaterialService;
 use App\Support\Query;
 use App\Modules\User\UserService;
-use App\Support\PaginatedResult;
 use App\Views\ViewRender;
-use Exception;
 
 class InterventionController
 {
@@ -22,16 +20,11 @@ class InterventionController
 
     public function index()
     {
-        echo "<pre>";
-        var_dump(PaginatedResult::getPageSelection(10, 20, 1));
-        echo "</pre>";
-        die;
         $view = new ViewRender();
         $page = Query::getParameter("page", 1);
         $resultsPerPage = Query::getParameter("results_per_page", 25);
         $paginatedResults = $this->interventionService->getPaginatedInterventions($page, $resultsPerPage);
         $udiStaff = $this->userService->getUDIStaff();
-        $users = $this->userService->getAll();
         $keywords = $this->keywordService->getAll();
         $interventionTypes = $this->interventionService->getInterventionTypes();
         $materials = $this->materialService->getAll();
@@ -41,7 +34,6 @@ class InterventionController
             [
                 "paginatedResults" => $paginatedResults,
                 "udiStaff" => $udiStaff,
-                "users" => $users,
                 "materials" => $materials,
                 "keywords" => $keywords,
                 "interventionTypes" => $interventionTypes,
@@ -52,8 +44,8 @@ class InterventionController
     public function apiShow($id)
     {
         header("Content-Type: application/json");
-        
-        if(!NumberHelper::isCastableToInt($id)) {
+
+        if (!NumberHelper::isCastableToInt($id)) {
             return json_encode(null);
         }
 

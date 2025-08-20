@@ -73,6 +73,14 @@ class Routes
 
             return $controller->getUDIStaff();
         });
+        $router->get("/api/user", function () {
+            $database = new Database();
+            $userRepository = new UserRepository($database);
+            $userService = new UserService($userRepository);
+            $controller = new UserController($userService);
+
+            return $controller->apiGetAll();
+        });
     }
 
     public static function getActive(): string
