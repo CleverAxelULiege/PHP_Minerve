@@ -23,7 +23,7 @@ class InterventionController
     {
         $view = new ViewRender();
         $page = Query::getParameter("page", 1);
-        $resultsPerPage = Query::getParameter("results_per_page", 25);
+        $resultsPerPage = Query::getParameter("results_per_page", 50);
         $paginatedResults = $this->interventionService->getPaginatedInterventions($page, $resultsPerPage);
         $pagesDisplay = PaginatedResult::getPageSelection($paginatedResults->perPage, $paginatedResults->total, $paginatedResults->currentPage);
         $udiStaff = $this->userService->getUDIStaff();
