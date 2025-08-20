@@ -99,6 +99,7 @@ use App\Modules\Intervention\InterventionState;
          </table>
       </div>
    </div>
+   
    <div class="intervention_details_container hidden">
       <div class="content hidden">
 
