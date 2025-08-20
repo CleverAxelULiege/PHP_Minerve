@@ -7,6 +7,7 @@ use App\Modules\Keyword\KeywordService;
 use App\Modules\Material\MaterialService;
 use App\Support\Query;
 use App\Modules\User\UserService;
+use App\Support\PaginatedResult;
 use App\Views\ViewRender;
 
 class InterventionController
@@ -24,6 +25,7 @@ class InterventionController
         $page = Query::getParameter("page", 1);
         $resultsPerPage = Query::getParameter("results_per_page", 25);
         $paginatedResults = $this->interventionService->getPaginatedInterventions($page, $resultsPerPage);
+        $pagesDisplay = PaginatedResult::getPageSelection($paginatedResults->perPage, $paginatedResults->total, $paginatedResults->currentPage);
         $udiStaff = $this->userService->getUDIStaff();
         $keywords = $this->keywordService->getAll();
         $interventionTypes = $this->interventionService->getInterventionTypes();
@@ -37,6 +39,7 @@ class InterventionController
                 "materials" => $materials,
                 "keywords" => $keywords,
                 "interventionTypes" => $interventionTypes,
+                "pagesDisplay" => $pagesDisplay
             ]
         );
     }

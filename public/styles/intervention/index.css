@@ -204,6 +204,38 @@ body {
     width: 44px;
 }
 
+.intervention_page_selection {
+    margin-bottom: 20px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.intervention_page_selection a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+    min-width: 40px;
+    min-height: 40px;
+    text-decoration: none;
+    color: black;
+    font-size: 18px;
+    border: 1px solid #555;
+    border-radius: 5px;
+    background-color: white;
+}
+.intervention_page_selection a:hover, .intervention_page_selection a.active {
+    color: white;
+    background-color: black;
+}
+
+.intervention_page_selection .dotted_page {
+    align-self: flex-end;
+}
+
 
 
 

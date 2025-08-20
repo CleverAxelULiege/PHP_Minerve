@@ -13,16 +13,18 @@ class InterventionRepository
         $this->db = $database;
     }
 
-    public function getTotalInterventionsCount(): int
+    public function getTotalInterventionsCount(array $filterStatus = ["clôturée", "persistant"]): int
     {
-        $sql = "SELECT COUNT(*) as total FROM interventions";
-        return (int) $this->db->run($sql)->fetchObject()->total;
+        $filterStatusMapped = implode(" AND ", array_fill(0, count($filterStatus), "i.status NOT ILIKE ?"));
+        $sql = "SELECT COUNT(*) as total FROM interventions as i WHERE $filterStatusMapped";
+        return (int) $this->db->run($sql, [...$filterStatus])->fetchObject()->total;
     }
 
     public function getPaginatedInterventions(int $page, int $resultsPerPage, array $filterStatus = ["clôturée", "persistant"])
     {
         $filterStatusMapped = implode(" AND ", array_fill(0, count($filterStatus), "i.status NOT ILIKE ?"));
         $offset = ($page - 1) * $resultsPerPage;
+
         $sql = "
             SELECT
                 i.*,
@@ -179,6 +181,7 @@ class InterventionRepository
 
     private function getBatchHelpers(array $interventionIds)
     {
+
         $placeholders = str_repeat('?,', count($interventionIds) - 1) . '?';
         $sql = "
             SELECT 
