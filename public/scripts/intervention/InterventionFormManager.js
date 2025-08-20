@@ -370,49 +370,52 @@ export class InterventionFormManager {
 
     populateMessages(data) {
         this.DOM.messagesContainer.innerHTML = "";
-        data.messages.forEach((message) => {
+        data.messages.forEach((message, index) => {
             const id = message.id;
-            const msg = message.message;
             const isPublic = message.isPublic;
             const createdAt = message.createdAt ? new Date(message.createdAt) : null;
 
-            const msgAuthorFirstname = message.author ? message.author.firstName : null;
-            const msgAuthorLastName = message.author ? message.author.lastName : null;
-            const msgAuthorUlgId = message.author ? message.author.ulgId : null;
-            let values = ([msgAuthorFirstname, msgAuthorLastName, msgAuthorUlgId].filter((v) => v != null));
-            let backgroundAvatarColor = "##4aa7ff"; //default for now ~redish
+            const msgAuthorFirstname = message.author ? message.author.firstName : "";
+            const msgAuthorLastName = message.author ? message.author.lastName : "";
+            const msgAuthorUlgId = message.author ? message.author.ulgId : "";
 
-            if (values.length != 0) {
-                //will hash the author name and its id to get a color back.
-                backgroundAvatarColor = ColorHelper.colorForValues(...values.filter((v) => v != null)).hex;
-                console.log(backgroundAvatarColor);
+            let values = [msgAuthorFirstname, msgAuthorLastName, msgAuthorUlgId].filter(v => v);
+            let backgroundAvatarColor = "#4aa7ff"; // default
+
+            if (values.length !== 0) {
+                backgroundAvatarColor = ColorHelper.colorForValues(...values).hex;
             }
 
-            //will be the initial of the avatar if no last name or firstname will be a "?"
-            let initial = msgAuthorFirstname || msgAuthorLastName ? "" : "?"
-
-            if (initial == "") {
-                if (msgAuthorFirstname && msgAuthorFirstname.length > 0) {
-                    initial += msgAuthorFirstname[0];
-                }
-
-                if (msgAuthorLastName && msgAuthorLastName.length > 0) {
-                    initial += msgAuthorLastName[0];
-                }
+            // Avatar initials
+            let initial = "?";
+            if (msgAuthorFirstname || msgAuthorLastName) {
+                initial = "";
+                if (msgAuthorFirstname) initial += msgAuthorFirstname[0];
+                if (msgAuthorLastName) initial += msgAuthorLastName[0];
             }
 
+            // Date formatting
+            let formattedDate = createdAt ? formatDate(createdAt, true) : "";
+
+            // Escape and format message text
+            let safeMsg = document.createElement("div");
+            safeMsg.textContent = message.message || "";
+            let msgWithBreaks = safeMsg.innerHTML.replace(/\r\n/g, "<br />");
+
+            // Build container
             let messageContainer = document.createElement("div");
             messageContainer.classList.add("message_container");
+
             if (isPublic) {
-                messageContainer.innerHTML =
-                    `
+                messageContainer.innerHTML = `
                 <div class="message_header">
+                     <div class="message_index">#${index + 1}</div>
                      <div class="message_meta">
                         <div class="author_info">
-                           <div class="author_avatar">JD</div>
+                           <div class="author_avatar" style="background-color:${backgroundAvatarColor};">${initial}</div>
                            <div>
-                              <div class="author_name">${msgAuthorFirstname} ${msgAuthorLastName}</div>
-                              <div class="message_date">March 15, 2024 at 2:30 PM</div>
+                              <div class="author_name"></div>
+                              <div class="message_date"></div>
                            </div>
                         </div>
                         <div class="visibility_indicator visibility_public">
@@ -424,20 +427,41 @@ export class InterventionFormManager {
                         </div>
                      </div>
                   </div>
-                  <div class="message_content">
-                     <p>This is a sample message post that demonstrates the styling. The design is clean and modern, with proper spacing and typography that's easy to read.</p>
-                     <p>The header contains all the metadata including author, date, and visibility status, while the content area provides a comfortable reading experience.</p>
-                  </div>
-                `
+                  <div class="message_content">${msgWithBreaks}</div>
+            `;
             } else {
-
+                messageContainer.innerHTML = `
+                <div class="message_header">
+                     <div class="message_index">#${index + 1}</div>
+                     <div class="message_meta">
+                        <div class="author_info">
+                           <div class="author_avatar" style="background-color:${backgroundAvatarColor};">${initial}</div>
+                           <div>
+                              <div class="author_name"></div>
+                              <div class="message_date"></div>
+                           </div>
+                        </div>
+                        <div class="visibility_indicator visibility_private">
+                           <svg class="visibility_icon" fill="currentColor" viewBox="0 0 20 20">
+                              <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
+                           </svg>
+                           Visible pour l'UDI <br>uniquement.
+                        </div>
+                     </div>
+                  </div>
+                  <div class="message_content">${msgWithBreaks}</div>
+            `;
             }
 
+            // Escape text fields safely via textContent
+            messageContainer.querySelector(".author_name").textContent = `${msgAuthorFirstname} ${msgAuthorLastName}`;
+            messageContainer.querySelector(".message_date").textContent = formattedDate;
 
-
-
-        })
+            this.DOM.messagesContainer.appendChild(messageContainer);
+        });
     }
+
+
 
     addBreadcrumbItem(text, value, container) {
         const item = document.createElement('div');

@@ -102,8 +102,8 @@ use App\Modules\Intervention\Const\InterventionState;
 
 
    <!-- SIDE PANEL when clicking on a row -->
-   <div class="intervention_details_container ">
-      <div class="content ">
+   <div class="intervention_details_container hidden">
+      <div class="content hidden">
          <div class="close_button_container">
             <button title="Rabattre le panneau latéral" id="close_intervention_details_container_button">
                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><!--!Font Awesome Free v7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
@@ -290,6 +290,7 @@ use App\Modules\Intervention\Const\InterventionState;
 
                <div class="message_container">
                   <div class="message_header">
+                     <div class="message_index">#1</div>
                      <div class="message_meta">
                         <div class="author_info">
                            <div class="author_avatar">JD</div>
