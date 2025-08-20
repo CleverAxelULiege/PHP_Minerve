@@ -7,6 +7,7 @@ use App\Modules\Keyword\KeywordService;
 use App\Modules\Material\MaterialService;
 use App\Support\Query;
 use App\Modules\User\UserService;
+use App\Support\PaginatedResult;
 use App\Views\ViewRender;
 use Exception;
 
@@ -21,6 +22,10 @@ class InterventionController
 
     public function index()
     {
+        echo "<pre>";
+        var_dump(PaginatedResult::getPageSelection(10, 20, 1));
+        echo "</pre>";
+        die;
         $view = new ViewRender();
         $page = Query::getParameter("page", 1);
         $resultsPerPage = Query::getParameter("results_per_page", 25);
