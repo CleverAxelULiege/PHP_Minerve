@@ -3,7 +3,7 @@ import { ColorHelper } from "../helpers/ColorHelper.js";
 import { formatDate } from "../helpers/date.js";
 import { convertToAscii } from "../helpers/string.js";
 import { InterventionApiCall } from "./api/InterventionApiCall.js";
-
+import { generateUniqueId } from "../helpers/random.js";
 
 const CONFIG = {
     SHOW_TIME_IN_DATES: true,
@@ -451,7 +451,23 @@ export class InterventionFormManager {
                         <option value="public">Publique</option>
                         <option value="only_udi">Visible uniquement pour l'UDI</option>
                     </select>
-                  </div>
+                 </div>
+                 <div class="upload_container">
+                     <div class="file_input_wrapper">
+                         <div><label for="imageInput" class="upload_label">Sélectionner des images à importer</label></div>
+                         <input
+                            style="display: none;"
+                             type="file" 
+                             id="imageInput" 
+                             class="file-input" 
+                             multiple 
+                             accept="image/*"
+                         >
+                     </div>
+                     
+                     <div id="thumbnailsBreadcrumb" class="thumbnails_breadcrumb">
+                     </div>
+                 </div>
             `;
 
 
@@ -475,8 +491,65 @@ export class InterventionFormManager {
             const saveEditMessageButton = messageContainer.querySelector("#save_edit_button");
             saveEditMessageButton.addEventListener("click", () => this.saveEditMessage(editMessageButton.closest(".message_container")));
 
+            const thumbnailsBreadCrumb = messageContainer.querySelector(".thumbnails_breadcrumb");
+
+            const imgInput = messageContainer.querySelector("#imageInput");
+            imgInput.addEventListener("change", (e) => {
+                this.handleFileSelection(e, thumbnailsBreadCrumb)
+            });
+
             this.DOM.messagesContainer.appendChild(messageContainer);
         });
+    }
+
+    handleFileSelection(event, thumbnailsBreadCrumb) {
+        const formData = new FormData();
+
+        /**@type {File[]} */
+        const files = Array.from(event.target.files);
+        const imageFiles = files.filter(file => file.type.startsWith('image/'));
+
+        imageFiles.forEach((imageFile) => {
+            const thumbnailItem = document.createElement('div');
+            thumbnailItem.className = 'thumbnail_item';
+
+            const id = generateUniqueId();
+            thumbnailItem.setAttribute("data-id", id);
+            formData.append("files[]", imageFile, id);
+
+            const imgContainer = document.createElement("button");
+            imgContainer.className = "img_container";
+
+            const img = document.createElement('img');
+
+            imgContainer.appendChild(img);
+
+            const removeBtn = document.createElement('button');
+            removeBtn.type = "button";
+            removeBtn.className = 'remove_btn';
+            removeBtn.innerHTML = '×';
+            removeBtn.onclick = () => removeImage(index);
+
+            const objectUrl = URL.createObjectURL(imageFile);
+            img.src = objectUrl;
+
+            img.onload = () => URL.revokeObjectURL(objectUrl);
+
+            thumbnailItem.appendChild(imgContainer);
+            thumbnailItem.appendChild(removeBtn);
+            thumbnailsBreadCrumb.appendChild(thumbnailItem);
+        });
+
+        fetch("/api/intervention_file_images", {
+            body: formData,
+            method: "POST"
+        }).then((res) => res.json())
+        .then((json) => {
+            console.log(json);
+            
+        })
+        
+
     }
 
     /**
@@ -491,7 +564,7 @@ export class InterventionFormManager {
         const msgOption = messageContainer.querySelector(".message_option");
         const spinnercontainer = messageContainer.querySelector(".spinner_container");
 
-        
+
 
         // console.log(
 

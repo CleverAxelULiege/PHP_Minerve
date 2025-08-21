@@ -9,6 +9,7 @@ use App\Support\Query;
 use App\Modules\User\UserService;
 use App\Support\PaginatedResult;
 use App\Views\ViewRender;
+use Exception;
 
 class InterventionController
 {
@@ -42,6 +43,23 @@ class InterventionController
                 "pagesDisplay" => $pagesDisplay
             ]
         );
+    }
+
+    public function interventionFileImages()
+    {
+        header("Content-Type: application/json");
+
+        if (!isset($_FILES['files'])) {
+            http_response_code(405);
+            return json_encode(["msg" => "Requête invalide"], JSON_UNESCAPED_UNICODE);
+            exit;
+        }
+
+        try {
+            return json_encode(["msg" => $this->interventionService->interventionFileImages($_FILES["files"])], JSON_UNESCAPED_UNICODE);
+        } catch (Exception $e) {
+            return json_encode(["msg" => "FML"]);
+        }
     }
 
     public function apiShow($id)

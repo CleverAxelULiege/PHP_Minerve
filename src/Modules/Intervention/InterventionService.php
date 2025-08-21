@@ -8,6 +8,7 @@ use App\Modules\Intervention\DTOs\InterventionTypeDto;
 
 class InterventionService
 {
+    public const INTERVENTION_IMAGES_DIRECTORY = __DIR__ . "/../../../public/upload/intervention_images";
 
     public function __construct(private InterventionRepository $interventionRepository) {}
 
@@ -53,5 +54,48 @@ class InterventionService
     {
         $interventionMessages = $this->interventionRepository->getInterventionMessages($interventionId);
         return array_map(fn($m) => InterventionMapper::mapToMessageDto($m), $interventionMessages);
+    }
+
+    public function interventionFileImages(array $files)
+    {
+
+        $uploadedFiles = [];
+
+        foreach ($files['name'] as $index => $originalName) {
+            if ($files['error'][$index] !== UPLOAD_ERR_OK) {
+                continue;
+            }
+
+            $tmpPath = $files['tmp_name'][$index];
+            $mimeType = $files["type"][$index];
+
+            $extMap = [
+                'image/jpeg' => 'jpg',
+                'image/png'  => 'png',
+                'image/gif'  => 'gif',
+                'image/webp' => 'webp',
+                'image/bmp'  => 'bmp',
+                'image/svg+xml' => 'svg'
+            ];
+
+            $extension = $extMap[$mimeType] ?? null;
+
+            if ($extension == null)
+                continue;
+
+            $uniqueName = uniqid('', true) . '_' . bin2hex(random_bytes(8));
+            $newFilename = $uniqueName . '.' . strtolower($extension);
+
+            $destination = InterventionService::INTERVENTION_IMAGES_DIRECTORY . '/' . $newFilename;
+            if (move_uploaded_file($tmpPath, $destination)) {
+                $uploadedFiles[] = [
+                    'original_name' => $originalName,
+                    'new_path' => "/upload/intervention_images/" . $newFilename
+                ];
+            }
+        }
+
+
+        return $uploadedFiles;
     }
 }
