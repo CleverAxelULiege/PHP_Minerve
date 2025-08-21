@@ -406,6 +406,7 @@ export class InterventionFormManager {
             let messageContainer = document.createElement("div");
             messageContainer.classList.add("message_container");
             messageContainer.setAttribute("data-id", id);
+            messageContainer.setAttribute("data-is-public", isPublic);
 
             if (isPublic) {
                 messageContainer.innerHTML = `
@@ -434,6 +435,17 @@ export class InterventionFormManager {
                      </div>
                   </div>
                   <div class="message_content">${msgWithBreaks}</div>
+                  <div class="clone_message_content hidden"></div>
+                  <div class="message_option hidden">
+                    <button id="save_edit_button" type="button">
+                        Enregistrer la modification
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><!--!Font Awesome Free v7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M160 96C124.7 96 96 124.7 96 160L96 480C96 515.3 124.7 544 160 544L480 544C515.3 544 544 515.3 544 480L544 237.3C544 220.3 537.3 204 525.3 192L448 114.7C436 102.7 419.7 96 402.7 96L160 96zM192 192C192 174.3 206.3 160 224 160L384 160C401.7 160 416 174.3 416 192L416 256C416 273.7 401.7 288 384 288L224 288C206.3 288 192 273.7 192 256L192 192zM320 352C355.3 352 384 380.7 384 416C384 451.3 355.3 480 320 480C284.7 480 256 451.3 256 416C256 380.7 284.7 352 320 352z"/></svg>
+                    </button>
+                    <select id="visibility_select">
+                        <option selected value="public">Publique</option>
+                        <option value="only_udi">Visible uniquement pour l'UDI</option>
+                    </select>
+                  </div>
             `;
             } else {
                 messageContainer.innerHTML = `
@@ -461,6 +473,17 @@ export class InterventionFormManager {
                      </div>
                   </div>
                   <div class="message_content">${msgWithBreaks}</div>
+                  <div class="clone_message_content hidden"></div>
+                  <div class="message_option hidden">
+                    <button id="save_edit_button" type="button">
+                        Enregistrer la modification
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><!--!Font Awesome Free v7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M160 96C124.7 96 96 124.7 96 160L96 480C96 515.3 124.7 544 160 544L480 544C515.3 544 544 515.3 544 480L544 237.3C544 220.3 537.3 204 525.3 192L448 114.7C436 102.7 419.7 96 402.7 96L160 96zM192 192C192 174.3 206.3 160 224 160L384 160C401.7 160 416 174.3 416 192L416 256C416 273.7 401.7 288 384 288L224 288C206.3 288 192 273.7 192 256L192 192zM320 352C355.3 352 384 380.7 384 416C384 451.3 355.3 480 320 480C284.7 480 256 451.3 256 416C256 380.7 284.7 352 320 352z"/></svg>
+                    </button>
+                    <select id="visibility_select">
+                        <option value="public">Publique</option>
+                        <option selected value="only_udi">Visible uniquement pour l'UDI</option>
+                    </select>
+                  </div>
             `;
             }
 
@@ -470,8 +493,46 @@ export class InterventionFormManager {
 
             const editMessageButton = messageContainer.querySelector("#edit_message_button");
             editMessageButton.addEventListener("click", () => this.displayEditBoxMessage(editMessageButton.closest(".message_container")));
+
+            const saveEditMessageButton = messageContainer.querySelector("#save_edit_button");
+            saveEditMessageButton.addEventListener("click", () => this.saveEditMessage(editMessageButton.closest(".message_container")));
+
             this.DOM.messagesContainer.appendChild(messageContainer);
         });
+    }
+
+    /**
+     * @param {HTMLElement} messageContainer 
+     */
+    saveEditMessage(messageContainer) {
+        /**@type {HTMLElement} */
+        const msgContent = messageContainer.querySelector(".message_content");
+        const cloneMsgContent = messageContainer.querySelector(".clone_message_content");
+
+        /**@type {HTMLElement} */
+        const msgOption = messageContainer.querySelector(".message_option");
+
+        // console.log(
+
+        //     cloneMsgContent.innerHTML.replace(/<div>/gi, "\n")
+        //         .replace(/<br\s*\/?>/gi, "\n")
+        //         .replace(/<\/div>/gi, "")
+        // );
+
+
+        // return;
+
+        msgContent.innerHTML = cloneMsgContent.innerHTML.replace(
+            /(?:\[img\s+url=([^\]]+)\]|\&#91;img\s+url=([^\&#]+)\&#93;)/gi,
+            (match, p1, p2) => `<img src="${p1 || p2}" alt="image">`
+        );
+
+
+
+        cloneMsgContent.classList.add("hidden");
+        msgOption.classList.add("hidden");
+        msgContent.classList.remove("hidden");
+
     }
 
     /**
@@ -480,11 +541,35 @@ export class InterventionFormManager {
     displayEditBoxMessage(messageContainer) {
         /**@type {HTMLElement} */
         const msgContent = messageContainer.querySelector(".message_content");
-        msgContent.setAttribute("contenteditable", "true");
-        msgContent.focus();
+        const cloneMsgContent = messageContainer.querySelector(".clone_message_content");
+
+        /**@type {HTMLElement} */
+        const msgOption = messageContainer.querySelector(".message_option");
+
+
+        if (!cloneMsgContent.classList.contains("hidden")) {
+            cloneMsgContent.classList.add("hidden");
+            msgOption.classList.add("hidden");
+            msgContent.classList.remove("hidden");
+            return;
+        }
+
+        cloneMsgContent.innerHTML = msgContent.innerHTML.replace(
+            /(?:<img[^>]*src=["']([^"']+)["'][^>]*>|&lt;img[^&]*src=["']([^"']+)["'][^&]*&gt;)/gi,
+            (match, p1, p2) => `[img url=${p1 || p2}]`
+        );
+
+        cloneMsgContent.classList.remove("hidden");
+        msgOption.classList.remove("hidden");
+        msgContent.classList.add("hidden");
+
+        cloneMsgContent.setAttribute("contenteditable", "true");
+        cloneMsgContent.setAttribute("spellcheck", "false");
+        cloneMsgContent.focus();
+
 
         const range = document.createRange();
-        range.selectNodeContents(msgContent);
+        range.selectNodeContents(cloneMsgContent);
         range.collapse(false);
 
         const selection = window.getSelection();

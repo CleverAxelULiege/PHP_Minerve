@@ -47,7 +47,8 @@ body {
     background-color: #f9f9f9;
 }
 
-.table_row:hover, .table_row.active {
+.table_row:hover,
+.table_row.active {
     background-color: rgb(169, 211, 245);
     cursor: pointer;
 }
@@ -98,12 +99,15 @@ body {
 .table_cell.column_date {
     max-width: 150px;
 }
+
 .table_cell.column_helper {
     max-width: 150px;
 }
+
 .table_cell.service_column {
     max-width: 150px;
 }
+
 .table_cell.status_column {
     max-width: 100px;
 }
@@ -227,7 +231,9 @@ body {
     border-radius: 5px;
     background-color: white;
 }
-.intervention_page_selection a:hover, .intervention_page_selection a.active {
+
+.intervention_page_selection a:hover,
+.intervention_page_selection a.active {
     color: white;
     background-color: black;
 }
@@ -295,6 +301,7 @@ body {
     color: #555;
     padding: 0 0 5px 0;
 }
+
 .message_index_edit_button span {
     margin-left: auto;
 }
@@ -308,6 +315,7 @@ body {
     border-radius: 10px;
     background-color: #f3f6fa;
 }
+
 .message_index_edit_button button svg {
     width: 100%;
 }
@@ -384,17 +392,24 @@ body {
     height: 12px;
 }
 
-.message_content {
+.clone_message_content.hidden, .message_content.hidden {
+    display: none;
+}
+
+.message_content,
+.clone_message_content {
     padding: 20px;
     color: #334155;
     font-size: 15px;
 }
 
-.message_content p {
+.message_content p,
+.clone_message_content p {
     margin-bottom: 12px;
 }
 
-.message_content p:last-child {
+.message_content p:last-child,
+.clone_message_content p:last-child {
     margin-bottom: 0;
 }
 
@@ -408,6 +423,59 @@ body {
     .visibility_indicator {
         align-self: flex-end;
     }
+}
+
+.message_option {
+    border-top: 1px solid #afafaf;
+    padding: 10px;
+    display: flex;
+    gap: 10px;
+    align-items: stretch;
+}
+
+.message_option.hidden {
+    display: none;
+}
+
+.message_option button {
+    flex: 1;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.message_option button svg {
+    fill: white;
+    width: 25px;
+}
+
+.message_option button:hover {
+    background: #45a049;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.message_option select {
+    flex: 1;
+    border: none;
+    outline: none;
+    border: 1px solid #555;
+    cursor: pointer;
+
+}
+
+.message_option select:hover {
+    background-color: #f7f7f7;
 }
 
 
