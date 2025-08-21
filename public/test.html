@@ -70,19 +70,25 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        .thumbnail-item:not(:last-child)::after {
-            content: '>';
-            margin-left: 15px;
-            color: #6c757d;
-            font-weight: bold;
-        }
 
-        .thumbnail {
+
+        .img_container {
+            background-color: white;
+            border-style: none;
+            outline: none;
             width: 50px;
             height: 50px;
-            object-fit: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .img_container img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
             border-radius: 4px;
-            margin-right: 8px;
         }
 
         .file-name {
@@ -183,10 +189,14 @@
             selectedImages.forEach((file, index) => {
                 const thumbnailItem = document.createElement('div');
                 thumbnailItem.className = 'thumbnail-item';
+
+                const imgContainer = document.createElement("button");
+                imgContainer.className = "img_container";
                 
                 const img = document.createElement('img');
-                img.className = 'thumbnail';
                 img.alt = file.name;
+
+                imgContainer.appendChild(img);
                 
                 const fileName = document.createElement('div');
                 fileName.className = 'file-name';
@@ -204,7 +214,7 @@
                 // Clean up object URL when image loads
                 img.onload = () => URL.revokeObjectURL(objectUrl);
                 
-                thumbnailItem.appendChild(img);
+                thumbnailItem.appendChild(imgContainer);
                 thumbnailItem.appendChild(removeBtn);
                 thumbnailsContainer.appendChild(thumbnailItem);
             });
