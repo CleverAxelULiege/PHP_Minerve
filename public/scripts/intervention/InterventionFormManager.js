@@ -408,8 +408,8 @@ export class InterventionFormManager {
             messageContainer.setAttribute("data-id", id);
             messageContainer.setAttribute("data-is-public", isPublic);
 
-            if (isPublic) {
-                messageContainer.innerHTML = `
+            messageContainer.innerHTML = `
+                <div class="spinner_container hidden"><div class="spinner"></div></div>
                 <div class="message_header">
                      <div class="message_index_edit_button">
                         <span>#${index + 1}</span>
@@ -425,46 +425,14 @@ export class InterventionFormManager {
                               <div class="message_date"></div>
                            </div>
                         </div>
-                        <div class="visibility_indicator visibility_public">
+                        <div class="visibility_indicator hidden visibility_public">
                            <svg class="visibility_icon" fill="currentColor" viewBox="0 0 20 20">
                               <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
                               <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
                            </svg>
                            Publique
                         </div>
-                     </div>
-                  </div>
-                  <div class="message_content">${msgWithBreaks}</div>
-                  <div class="clone_message_content hidden"></div>
-                  <div class="message_option hidden">
-                    <button id="save_edit_button" type="button">
-                        Enregistrer la modification
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><!--!Font Awesome Free v7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M160 96C124.7 96 96 124.7 96 160L96 480C96 515.3 124.7 544 160 544L480 544C515.3 544 544 515.3 544 480L544 237.3C544 220.3 537.3 204 525.3 192L448 114.7C436 102.7 419.7 96 402.7 96L160 96zM192 192C192 174.3 206.3 160 224 160L384 160C401.7 160 416 174.3 416 192L416 256C416 273.7 401.7 288 384 288L224 288C206.3 288 192 273.7 192 256L192 192zM320 352C355.3 352 384 380.7 384 416C384 451.3 355.3 480 320 480C284.7 480 256 451.3 256 416C256 380.7 284.7 352 320 352z"/></svg>
-                    </button>
-                    <select id="visibility_select">
-                        <option selected value="public">Publique</option>
-                        <option value="only_udi">Visible uniquement pour l'UDI</option>
-                    </select>
-                  </div>
-            `;
-            } else {
-                messageContainer.innerHTML = `
-                <div class="message_header">
-                     <div class="message_index_edit_button">
-                        <span>#${index + 1}</span>
-                        <button id="edit_message_button" type="button" title="Éditer le message">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><!--!Font Awesome Free v7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M535.6 85.7C513.7 63.8 478.3 63.8 456.4 85.7L432 110.1L529.9 208L554.3 183.6C576.2 161.7 576.2 126.3 554.3 104.4L535.6 85.7zM236.4 305.7C230.3 311.8 225.6 319.3 222.9 327.6L193.3 416.4C190.4 425 192.7 434.5 199.1 441C205.5 447.5 215 449.7 223.7 446.8L312.5 417.2C320.7 414.5 328.2 409.8 334.4 403.7L496 241.9L398.1 144L236.4 305.7zM160 128C107 128 64 171 64 224L64 480C64 533 107 576 160 576L416 576C469 576 512 533 512 480L512 384C512 366.3 497.7 352 480 352C462.3 352 448 366.3 448 384L448 480C448 497.7 433.7 512 416 512L160 512C142.3 512 128 497.7 128 480L128 224C128 206.3 142.3 192 160 192L256 192C273.7 192 288 177.7 288 160C288 142.3 273.7 128 256 128L160 128z"/></svg>
-                        </button>
-                     </div>
-                     <div class="message_meta">
-                        <div class="author_info">
-                           <div class="author_avatar" style="background-color:${backgroundAvatarColor};">${initial}</div>
-                           <div>
-                              <div class="author_name"></div>
-                              <div class="message_date"></div>
-                           </div>
-                        </div>
-                        <div class="visibility_indicator visibility_private">
+                        <div class="visibility_indicator hidden visibility_private">
                            <svg class="visibility_icon" fill="currentColor" viewBox="0 0 20 20">
                               <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
                            </svg>
@@ -481,15 +449,25 @@ export class InterventionFormManager {
                     </button>
                     <select id="visibility_select">
                         <option value="public">Publique</option>
-                        <option selected value="only_udi">Visible uniquement pour l'UDI</option>
+                        <option value="only_udi">Visible uniquement pour l'UDI</option>
                     </select>
                   </div>
             `;
-            }
+
 
             // Escape text fields safely via textContent
             messageContainer.querySelector(".author_name").textContent = `${msgAuthorFirstname} ${msgAuthorLastName}`;
             messageContainer.querySelector(".message_date").textContent = formattedDate;
+
+            const visibilityIndicator = messageContainer.querySelectorAll(".visibility_indicator");
+
+            if (isPublic) {
+                messageContainer.querySelector(`#visibility_select option[value="public"]`).selected = true;
+                visibilityIndicator[0].classList.remove("hidden");
+            } else {
+                messageContainer.querySelector(`#visibility_select option[value="only_udi"]`).selected = true;
+                visibilityIndicator[1].classList.remove("hidden");
+            }
 
             const editMessageButton = messageContainer.querySelector("#edit_message_button");
             editMessageButton.addEventListener("click", () => this.displayEditBoxMessage(editMessageButton.closest(".message_container")));
@@ -511,6 +489,9 @@ export class InterventionFormManager {
 
         /**@type {HTMLElement} */
         const msgOption = messageContainer.querySelector(".message_option");
+        const spinnercontainer = messageContainer.querySelector(".spinner_container");
+
+        
 
         // console.log(
 
@@ -518,20 +499,29 @@ export class InterventionFormManager {
         //         .replace(/<br\s*\/?>/gi, "\n")
         //         .replace(/<\/div>/gi, "")
         // );
-
-
         // return;
 
+        //replace the bbcode style with an img
         msgContent.innerHTML = cloneMsgContent.innerHTML.replace(
             /(?:\[img\s+url=([^\]]+)\]|\&#91;img\s+url=([^\&#]+)\&#93;)/gi,
             (match, p1, p2) => `<img src="${p1 || p2}" alt="image">`
         );
 
+        const isPublic = messageContainer.querySelector("#visibility_select").value == "public";
+        const visibilityIndicator = messageContainer.querySelectorAll(".visibility_indicator");
 
+        if (isPublic) {
+            visibilityIndicator[0].classList.remove("hidden");
+            visibilityIndicator[1].classList.add("hidden");
+        } else {
+            visibilityIndicator[0].classList.add("hidden");
+            visibilityIndicator[1].classList.remove("hidden");
+        }
 
         cloneMsgContent.classList.add("hidden");
         msgOption.classList.add("hidden");
         msgContent.classList.remove("hidden");
+        spinnercontainer.classList.remove("hidden");
 
     }
 
@@ -554,6 +544,7 @@ export class InterventionFormManager {
             return;
         }
 
+        //replace the img with a bbcode style [img url=<url>]
         cloneMsgContent.innerHTML = msgContent.innerHTML.replace(
             /(?:<img[^>]*src=["']([^"']+)["'][^>]*>|&lt;img[^&]*src=["']([^"']+)["'][^&]*&gt;)/gi,
             (match, p1, p2) => `[img url=${p1 || p2}]`
