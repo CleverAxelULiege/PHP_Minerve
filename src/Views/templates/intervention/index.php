@@ -318,7 +318,9 @@ use App\Modules\Intervention\Const\InterventionState;
 
                     <div class="message_container">
                         <div class="message_header">
-                            <div class="message_index">#1</div>
+                            <div class="message_index_edit_button">
+                                <span></span>
+                            </div>
                             <div class="message_meta">
                                 <div class="author_info">
                                     <div class="author_avatar">JD</div>

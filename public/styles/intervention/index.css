@@ -287,10 +287,29 @@ body {
     background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
 }
 
-.message_index {
+.message_index_edit_button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     font-size: 18px;
     color: #555;
-    text-align: center;
+    padding: 0 0 5px 0;
+}
+.message_index_edit_button span {
+    margin-left: auto;
+}
+
+.message_index_edit_button button {
+    margin-left: auto;
+    width: 30px;
+    cursor: pointer;
+    outline: none;
+    border-style: none;
+    border-radius: 10px;
+    background-color: #f3f6fa;
+}
+.message_index_edit_button button svg {
+    width: 100%;
 }
 
 .message_meta {
