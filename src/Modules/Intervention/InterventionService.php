@@ -86,7 +86,7 @@ class InterventionService
             if ($extension == null)
                 continue;
 
-            $uniqueName = uniqid('', true) . '_' . bin2hex(random_bytes(8));
+            $uniqueName = date("YmdHis") . '_' . bin2hex(random_bytes(8));
             $newFilename = $uniqueName . '.' . strtolower($extension);
 
             $destination = InterventionService::INTERVENTION_IMAGES_DIRECTORY . '/' . $newFilename;
