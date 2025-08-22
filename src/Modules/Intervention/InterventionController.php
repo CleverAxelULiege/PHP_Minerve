@@ -55,11 +55,7 @@ class InterventionController
             exit;
         }
 
-        try {
-            return json_encode(["msg" => $this->interventionService->interventionFileImages($_FILES["files"])], JSON_UNESCAPED_UNICODE);
-        } catch (Exception $e) {
-            return json_encode(["msg" => "FML"]);
-        }
+        return json_encode($this->interventionService->interventionFileImages($_FILES["files"]), JSON_UNESCAPED_UNICODE);
     }
 
     public function apiShow($id)

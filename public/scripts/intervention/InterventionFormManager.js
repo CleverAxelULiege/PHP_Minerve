@@ -540,12 +540,9 @@ export class InterventionFormManager {
             thumbnailsBreadCrumb.appendChild(thumbnailItem);
         });
 
-        fetch("/api/intervention_file_images", {
-            body: formData,
-            method: "POST"
-        }).then((res) => res.json())
-        .then((json) => {
-            console.log(json);
+
+        InterventionApiCall.postInterventionImgFiles(formData).then((fileResponseUpload) => {
+            console.log(fileResponseUpload);
             
         })
         

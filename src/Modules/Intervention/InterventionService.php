@@ -92,8 +92,8 @@ class InterventionService
             $destination = InterventionService::INTERVENTION_IMAGES_DIRECTORY . '/' . $newFilename;
             if (move_uploaded_file($tmpPath, $destination)) {
                 $uploadedFiles[] = [
-                    'original_name' => $originalName,
-                    'new_path' => "/upload/intervention_images/" . $newFilename
+                    'originalName' => $originalName,
+                    'newPath' => "/upload/intervention_images/" . $newFilename
                 ];
             }
         }

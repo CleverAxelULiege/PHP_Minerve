@@ -1,4 +1,10 @@
 /**
+ * @typedef {Object} FileUploadResponse
+ * @property {string} originalName
+ * @property {string} newPath
+ */
+
+/**
  * @typedef {Object} MessageAuthor
  * @property {number} id
  * @property {string} firstName
@@ -85,6 +91,19 @@ export class InterventionApiCall {
         } catch {
             return null;
         }
-        
+    }
+
+    /**
+     * @param {FormData} formData 
+     * @returns {Promise<FileUploadResponse[]>}
+     */
+    static async postInterventionImgFiles(formData) {
+        let res = await fetch("/api/intervention_file_images", {
+            body: formData,
+            method: "POST"
+        });
+
+        let json = await res.json();
+        return json;
     }
 }
