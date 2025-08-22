@@ -1,0 +1,13 @@
+Give IIS_IUSRS all authorization on the directory website. Give it as well the authorirization on the temp folder. This will probably resolve uploaded issue.
+But we still can't access the uploaded file from the browser
+https://stackoverflow.com/questions/19162553/iis-401-3-unauthorized
+
+
+
+
+    In IIS management console, in the Authentication part of the configuration of your site, modify the "Anonymous authentication" line and check the account set as "Specific user" (mine is IUSR).
+    Give read and execution permission on the folder of your site to the account listed as the specific user.
+
+OR
+
+    In IIS management console, in the Authentication part of the configuration of your site, modify the "Anonymous authentication" line by selecting "Identity of the application pool" instead of "Specific user".

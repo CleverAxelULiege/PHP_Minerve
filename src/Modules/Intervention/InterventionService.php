@@ -58,6 +58,9 @@ class InterventionService
 
     public function interventionFileImages(array $files)
     {
+        if(!is_dir(InterventionService::INTERVENTION_IMAGES_DIRECTORY)){
+            mkdir(InterventionService::INTERVENTION_IMAGES_DIRECTORY, 0777, true);
+        }
 
         $uploadedFiles = [];
 
