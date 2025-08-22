@@ -45,9 +45,23 @@ class InterventionController
         );
     }
 
-    public function interventionFileImages()
+    public function uploadInterventionFileImages()
     {
         header("Content-Type: application/json");
+
+        if (!isset($_FILES['files'])) {
+            http_response_code(405);
+            return json_encode(["msg" => "Requête invalide"], JSON_UNESCAPED_UNICODE);
+            exit;
+        }
+
+        return json_encode($this->interventionService->interventionFileImages($_FILES["files"]), JSON_UNESCAPED_UNICODE);
+    }
+
+    public function deleteInterventionFileImages()
+    {
+        header("Content-Type: application/json");
+        $data = $_POST["payload"];
 
         if (!isset($_FILES['files'])) {
             http_response_code(405);

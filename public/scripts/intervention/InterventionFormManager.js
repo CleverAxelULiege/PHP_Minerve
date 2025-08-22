@@ -502,6 +502,10 @@ export class InterventionFormManager {
         });
     }
 
+    /**
+     * @param {Event} event 
+     * @param {HTMLElement} thumbnailsBreadCrumb 
+     */
     handleFileSelection(event, thumbnailsBreadCrumb) {
         const formData = new FormData();
 
@@ -528,7 +532,7 @@ export class InterventionFormManager {
             removeBtn.type = "button";
             removeBtn.className = 'remove_btn';
             removeBtn.innerHTML = '×';
-            removeBtn.onclick = () => removeImage(index);
+            removeBtn.style.display = "none";
 
             const objectUrl = URL.createObjectURL(imageFile);
             img.src = objectUrl;
@@ -537,12 +541,33 @@ export class InterventionFormManager {
 
             thumbnailItem.appendChild(imgContainer);
             thumbnailItem.appendChild(removeBtn);
+
+            thumbnailItem.innerHTML += 
+            `<div class="spinner_container"><span class="spinner"></span></div>`
             thumbnailsBreadCrumb.appendChild(thumbnailItem);
         });
 
 
         InterventionApiCall.postInterventionImgFiles(formData).then((fileResponseUpload) => {
-            console.log(fileResponseUpload);
+            setTimeout(() => {
+                fileResponseUpload.forEach((fileResponse) => {
+                    const thumbNail = thumbnailsBreadCrumb.querySelector(`[data-id="${fileResponse.originalName}"]`);
+                    if(thumbNail) {
+
+                        const img = thumbNail.querySelector("img");
+                        img.src = fileResponse.newPath;
+
+                        /**@type {HTMLButtonElement} */
+                        const removeButton = thumbNail.querySelector(".remove_btn");
+                        removeButton.style.display = "";
+                        removeButton.onclick = () => {
+
+                        }
+                        thumbNail.querySelector(".spinner_container").classList.add("hidden");
+                    }
+                });
+            }, 5000);
+
             
         })
         

@@ -1,0 +1,3 @@
+SELECT * 
+FROM intervention_messages
+WHERE message ~* '(?:<img[^>]*src=["'']([^"'']+)["''][^>]*>|&lt;img[^&]*src=["'']([^"'']+)["''][^&]*&gt;)'

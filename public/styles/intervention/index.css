@@ -565,6 +565,7 @@ body {
 }
 
 .message_container .thumbnail_item {
+    overflow: hidden;
     display: flex;
     align-items: center;
     background: #f8f9fa;

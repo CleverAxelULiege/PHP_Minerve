@@ -80,7 +80,26 @@ class Routes
             $interventionService = new InterventionService($interventionRepository);
             $controller = new InterventionController($interventionService, $userService, $keywordService, $materialService);
 
-            return $controller->interventionFileImages();
+            return $controller->uploadInterventionFileImages();
+        });
+
+        $router->delete("/api/intervention_file_images", function () {
+            $database = new Database();
+
+            $userRepository = new UserRepository($database);
+            $userService = new UserService($userRepository);
+
+            $keywordRepository = new KeywordRepository($database);
+            $keywordService = new KeywordService($keywordRepository);
+
+            $materialRepository = new MaterialRepository($database);
+            $materialService = new MaterialService($materialRepository);
+
+            $interventionRepository = new InterventionRepository($database);
+            $interventionService = new InterventionService($interventionRepository);
+            $controller = new InterventionController($interventionService, $userService, $keywordService, $materialService);
+
+            return $controller->uploadInterventionFileImages();
         });
 
 
