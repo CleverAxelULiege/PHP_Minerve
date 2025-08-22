@@ -58,7 +58,7 @@ class InterventionService
 
     public function interventionFileImages(array $files)
     {
-        if(!is_dir(InterventionService::INTERVENTION_IMAGES_DIRECTORY)){
+        if (!is_dir(InterventionService::INTERVENTION_IMAGES_DIRECTORY)) {
             mkdir(InterventionService::INTERVENTION_IMAGES_DIRECTORY, 0777, true);
         }
 
@@ -98,7 +98,15 @@ class InterventionService
             }
         }
 
-
         return $uploadedFiles;
+    }
+
+    public function deleteInterventionFileImages($files) {
+        foreach($files as $file){
+            $baseName = basename($file);
+            if(file_exists(InterventionService::INTERVENTION_IMAGES_DIRECTORY . "/" . $baseName)){
+                unlink(InterventionService::INTERVENTION_IMAGES_DIRECTORY . "/" . $baseName);
+            }
+        }
     }
 }

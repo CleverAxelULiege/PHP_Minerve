@@ -106,4 +106,13 @@ export class InterventionApiCall {
         let json = await res.json();
         return json;
     }
+
+    /**
+     * @param {string[]} imgFiles 
+     */
+    static async deleteInterventionImgFiles(imgFiles) {
+        const formData = new FormData();
+        formData.append("files_to_delete", JSON.stringify(imgFiles));
+        
+    }
 }

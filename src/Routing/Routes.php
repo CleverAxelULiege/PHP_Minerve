@@ -80,7 +80,7 @@ class Routes
             $interventionService = new InterventionService($interventionRepository);
             $controller = new InterventionController($interventionService, $userService, $keywordService, $materialService);
 
-            return $controller->uploadInterventionFileImages();
+            return $controller->apiUploadInterventionFileImages();
         });
 
         $router->delete("/api/intervention_file_images", function () {
@@ -99,7 +99,7 @@ class Routes
             $interventionService = new InterventionService($interventionRepository);
             $controller = new InterventionController($interventionService, $userService, $keywordService, $materialService);
 
-            return $controller->uploadInterventionFileImages();
+            return $controller->apiDeleteInterventionFileImages();
         });
 
 

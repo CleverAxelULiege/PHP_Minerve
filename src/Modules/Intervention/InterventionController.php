@@ -45,7 +45,7 @@ class InterventionController
         );
     }
 
-    public function uploadInterventionFileImages()
+    public function apiUploadInterventionFileImages()
     {
         header("Content-Type: application/json");
 
@@ -58,18 +58,22 @@ class InterventionController
         return json_encode($this->interventionService->interventionFileImages($_FILES["files"]), JSON_UNESCAPED_UNICODE);
     }
 
-    public function deleteInterventionFileImages()
+    public function apiDeleteInterventionFileImages()
     {
         header("Content-Type: application/json");
-        $data = $_POST["payload"];
+        $data = $_POST["files_to_delete"] ?? null;
 
-        if (!isset($_FILES['files'])) {
+        if (!$data) {
             http_response_code(405);
             return json_encode(["msg" => "Requête invalide"], JSON_UNESCAPED_UNICODE);
             exit;
         }
 
-        return json_encode($this->interventionService->interventionFileImages($_FILES["files"]), JSON_UNESCAPED_UNICODE);
+        $filesToDelete = json_decode($data);
+        $this->interventionService->deleteInterventionFileImages($filesToDelete);
+
+        return json_encode(["msg" => "success"]);
+
     }
 
     public function apiShow($id)

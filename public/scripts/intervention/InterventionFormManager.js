@@ -542,35 +542,35 @@ export class InterventionFormManager {
             thumbnailItem.appendChild(imgContainer);
             thumbnailItem.appendChild(removeBtn);
 
-            thumbnailItem.innerHTML += 
-            `<div class="spinner_container"><span class="spinner"></span></div>`
+            thumbnailItem.innerHTML +=
+                `<div class="spinner_container"><span class="spinner"></span></div>`
             thumbnailsBreadCrumb.appendChild(thumbnailItem);
         });
 
 
         InterventionApiCall.postInterventionImgFiles(formData).then((fileResponseUpload) => {
-            setTimeout(() => {
-                fileResponseUpload.forEach((fileResponse) => {
-                    const thumbNail = thumbnailsBreadCrumb.querySelector(`[data-id="${fileResponse.originalName}"]`);
-                    if(thumbNail) {
+            fileResponseUpload.forEach((fileResponse) => {
+                const thumbNail = thumbnailsBreadCrumb.querySelector(`[data-id="${fileResponse.originalName}"]`);
+                if (thumbNail) {
 
-                        const img = thumbNail.querySelector("img");
-                        img.src = fileResponse.newPath;
+                    const img = thumbNail.querySelector("img");
+                    img.src = fileResponse.newPath;
+                    img.setAttribute("data-base-path", fileResponse.newPath)
 
-                        /**@type {HTMLButtonElement} */
-                        const removeButton = thumbNail.querySelector(".remove_btn");
-                        removeButton.style.display = "";
-                        removeButton.onclick = () => {
+                    /**@type {HTMLButtonElement} */
+                    const removeButton = thumbNail.querySelector(".remove_btn");
+                    removeButton.style.display = "";
+                    removeButton.onclick = () => {
+                        console.log(img.getAttribute("data-base-path"));
 
-                        }
-                        thumbNail.querySelector(".spinner_container").classList.add("hidden");
                     }
-                });
-            }, 5000);
+                    thumbNail.querySelector(".spinner_container").classList.add("hidden");
+                }
+            });
 
-            
+
         })
-        
+
 
     }
 
